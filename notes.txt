@@ -1,0 +1,11 @@
+--> 19 x 19
+
+-->Captures: must be a pair (2 stones)
+		   : free's the caputured stones positions
+		   : cannot move into a capture position
+
+-->Wins	   : five stones in a row, column or diagonal
+		   : five captures
+		   
+-->Free three's : no double free three's
+				: not forbidden to introduce a double three by caputuring		   
