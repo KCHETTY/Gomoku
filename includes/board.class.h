@@ -1,25 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   gomoku.h                                           :+:      :+:    :+:   */
+/*   board.class.h                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kchetty <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2016/11/28 08:35:01 by kchetty           #+#    #+#             */
-/*   Updated: 2016/11/29 08:28:59 by kchetty          ###   ########.fr       */
+/*   Created: 2016/11/29 11:49:26 by kchetty           #+#    #+#             */
+/*   Updated: 2016/11/29 14:32:56 by kchetty          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef _GOMOKU_H_
-# define _GOMOKU_H_
-
-# include <iostream>
-# include <fstream>
-# include <sstream>
-# include <string>
-# include <vector>
-# include <ncurses.h>
-# include <math.h>
-# include <regex>
-
-#endif
+class board
+{
+	private:
+		int	board[19][19];
+	
+	public:
+		
+		board()
+		{
+			for (int y = 0; y < 19; y++)
+			{
+				for (int x = 0; x < 19; x++)
+					board[y][x] = 0;
+			}
+		};	
+};
