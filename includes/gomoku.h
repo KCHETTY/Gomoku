@@ -18,8 +18,11 @@
 # include <sstream>
 # include <string>
 # include <vector>
-# include <ncurses.h>
+//# include <ncurses.h>
 # include <math.h>
 # include <regex>
+# include "board.class.h"
+
+using namespace std;
 
 #endif

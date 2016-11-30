@@ -31,7 +31,7 @@ OBJ = main.o
 $(NAME):
 	@echo "Compiling binaries..."	
 	@$(CC) -std=c++11 $(CFLAGS) $(PATH_HD) -c $(SRC)
-	@$(CC) -std=c++11 -o $(NAME) $(OBJ) $(NCURSES)
+	@$(CC) -std=c++11 -o $(NAME) $(OBJ)
 	@echo "Compilation was successful!"
 
 all: $(NAME)
