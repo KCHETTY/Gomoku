@@ -6,7 +6,7 @@
 /*   By: kchetty <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/28 08:34:50 by kchetty           #+#    #+#             */
-/*   Updated: 2016/11/30 08:29:37 by kchetty          ###   ########.fr       */
+/*   Updated: 2016/11/30 08:37:46 by kchetty          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,8 +41,8 @@ int	main()
 
 			if (board->check_win(1))
 			{
-				win = 0;
 				cout << "PLAYER O WINS!!" << endl;
+				break ;
 			}
 		}
 		else
@@ -60,11 +60,11 @@ int	main()
 			else
 				cout << "invalid move" << endl;	
 
-			 if (board->check_win(2))
-			 {
-				 win = 0;
-				 cout << "PLAYER X WINS!!" << endl;
-			 }
+			if (board->check_win(2))
+			{
+				cout << "PLAYER X WINS!!" << endl;
+				break ;
+			}
 		}
 
 	}	
