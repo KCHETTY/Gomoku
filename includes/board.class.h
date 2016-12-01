@@ -6,7 +6,7 @@
 /*   By: kchetty <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/29 11:49:26 by kchetty           #+#    #+#             */
-/*   Updated: 2016/12/01 12:32:53 by kchetty          ###   ########.fr       */
+/*   Updated: 2016/12/01 13:45:26 by kchetty          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,25 +29,25 @@ class board_class
 			for (int y = 0; y < 19; y++)
 			{
 				for (int x = 0; x < 19; x++)
-					this->board[y][x] = 0;
+					this->board[y][x] = -1;
 			}
 		};
 
 		int	get(int x, int y) { return (this->board[y][x]); }
 		int set_x(int x, int y) 
 		{ 
-			if ((this->board[y][x] == 0) && (x >= 0 && x <= 19) && (y >= 0 && y <= 19))
+			if ((this->board[y][x] == -1) && (x >= 0 && x <= 19) && (y >= 0 && y <= 19))
 			{
-				this->board[y][x] = 1;
+				this->board[y][x] = 0;
 				return (1);
 			}
 			return (0);
 		}
 		int set_o(int x, int y) 
 		{ 
-			if ((this->board[y][x] == 0) && (x >= 0 && x <= 19) && (y >= 0 && y <= 19    ))
+			if ((this->board[y][x] == -1) && (x >= 0 && x <= 19) && (y >= 0 && y <= 19    ))
 			{
-				this->board[y][x] = 2; 
+				this->board[y][x] = 1; 
 				return (1);
 			}
 			return (0);

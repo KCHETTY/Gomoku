@@ -6,13 +6,13 @@
 /*   By: kchetty <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/28 08:34:50 by kchetty           #+#    #+#             */
-/*   Updated: 2016/12/01 12:49:24 by kchetty          ###   ########.fr       */
+/*   Updated: 2016/12/01 13:45:18 by kchetty          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "gomoku.h"
 
-int board[20][20];
+//int board[20][20];
 int curX=0,curY=0;
 
 void paintscreen(int dim)
@@ -39,7 +39,7 @@ void paintscreen(int dim)
 	refresh();
 }
 
-int put_in_cell(int dim, int x, int y, int num)
+/*int put_in_cell(int dim, int x, int y, int num)
 {
 	if(x<0 || x>=dim || y<0 || y>=dim)
 		return(1); 
@@ -51,9 +51,9 @@ int put_in_cell(int dim, int x, int y, int num)
 	printw("%d %d\n",cellx,celly);
 	refresh();
 	return (0);
-}
+}*/
 
-int  prompt(int dim, int player)
+int  prompt(int dim, int player, t_global *g)
 {
 	//int value;
 	move(dim*2+2,0);
@@ -84,13 +84,13 @@ int  prompt(int dim, int player)
 			refresh();
 			if (player == 0)
 			{
-				mvprintw(curY*2+1,curX*4+2, "X");
-				board[curX][curY] = 1;
+				if (g->board->set_x(curX, curY))
+					mvprintw(curY*2+1,curX*4+2, "X");
 			}
 			else
 			{
-				mvprintw(curY*2+1,curX*4+2, "O");
-				board[curX][curY] = 2;
+				if (g->board->set_o(curX, curY))
+					mvprintw(curY*2+1,curX*4+2, "O");
 			}
 			break;
 		case 'q':
@@ -105,15 +105,13 @@ int  prompt(int dim, int player)
 }
 int main() 
 {
+	t_global g;
+
+	g.board = new board_class();
 	int dim,rtn,player = 0;
 	initscr();				// Start curses 
 	keypad(stdscr,TRUE);	// Turn on keypad
 	cbreak();				// Disable input buffering
-	/*do {   
-		printw("Please input a value between 4-20\n");
-		cin >> dim;
-		refresh();
-	} while(dim<4 || dim>20);*/
 
 	dim = 19; 
 	clear();
@@ -121,14 +119,17 @@ int main()
 
 	while (1)
 	{
-		if((rtn=prompt(dim,player))==-1)
+		if((rtn=prompt(dim,player,&g))==-1)
 			break;
-		if(rtn!=-2) { // Bad key or movement
-			// Game logic here
+		if(rtn!=-2) {
+			if (g.board->check_win(player))
+				break ;
 			player=!player;
 		}
 	}
 	endwin();
+
+	printf("HAHAHAHAHA SOMEONE WON");
 	return (0);
 }
 

@@ -6,7 +6,7 @@
 /*   By: kchetty <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/28 08:35:01 by kchetty           #+#    #+#             */
-/*   Updated: 2016/12/01 12:08:14 by kchetty          ###   ########.fr       */
+/*   Updated: 2016/12/01 13:45:24 by kchetty          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,5 +24,10 @@
 # include "board.class.h"
 
 using namespace std;
+
+typedef struct s_global
+{
+	board_class *board;
+}			   t_global;
 
 #endif
