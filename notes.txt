@@ -1,11 +1,16 @@
---> 19 x 19
+--> 19 x 19 //done
 
--->Captures: must be a pair (2 stones)
-		   : free's the caputured stones positions
-		   : cannot move into a capture position
+-->Captures: must be a pair (2 stones) //busy
+		   : free's the caputured stones positions //busy
+		   : cannot move into a capture position //busy
 
--->Wins	   : five stones in a row, column or diagonal
-		   : five captures
+-->Wins	   : five stones in a row, column or diagonal //done
+		   : five captures //done
 		   
--->Free three's : no double free three's
-				: not forbidden to introduce a double three by caputuring		   
+-->Free three's : no double free three's //busy
+				: not forbidden to introduce a double three by caputuring //busy
+
+-->GUI			: using ncurses //in progress
+
+-->AI			: move indicator //for later
+				: actual ai // for later
