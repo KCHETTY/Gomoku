@@ -6,7 +6,7 @@
 /*   By: kchetty <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/28 08:34:50 by kchetty           #+#    #+#             */
-/*   Updated: 2016/12/01 12:33:35 by kchetty          ###   ########.fr       */
+/*   Updated: 2016/12/01 12:46:32 by kchetty          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ int  prompt(int dim, int player)
 	//int value;
 	move(dim*2+2,0);
 	printw("Player %c ",player==0 ? 'X' : 'O');
-	move(curY*2+2,curX*4+1);
+	move(curY*2+1,curX*4+2);
 	refresh();
 	noecho();
 	switch(getch())
@@ -79,7 +79,7 @@ int  prompt(int dim, int player)
 			if(curY<dim-1)
 				curY++;
 			return(-2);
-		case '*':
+		case KEY_ENTER:
 			echo();
 			refresh();
 			if (player == 0)
