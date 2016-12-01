@@ -6,7 +6,7 @@
 /*   By: kchetty <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/28 08:35:01 by kchetty           #+#    #+#             */
-/*   Updated: 2016/11/29 08:28:59 by kchetty          ###   ########.fr       */
+/*   Updated: 2016/12/01 12:08:14 by kchetty          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 # include <sstream>
 # include <string>
 # include <vector>
-//# include <ncurses.h>
+# include <ncurses.h>
 # include <math.h>
 # include <regex>
 # include "board.class.h"

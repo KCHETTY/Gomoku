@@ -6,7 +6,7 @@
 #    By: kchetty <marvin@42.fr>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2016/11/07 14:11:28 by kchetty           #+#    #+#              #
-#    Updated: 2016/11/29 08:28:56 by kchetty          ###   ########.fr        #
+#    Updated: 2016/12/01 12:08:17 by kchetty          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -31,7 +31,7 @@ OBJ = main.o
 $(NAME):
 	@echo "Compiling binaries..."	
 	@$(CC) -std=c++11 $(CFLAGS) $(PATH_HD) -c $(SRC)
-	@$(CC) -std=c++11 -o $(NAME) $(OBJ)
+	@$(CC) -std=c++11 -o $(NAME) $(OBJ) $(NCURSES)
 	@echo "Compilation was successful!"
 
 all: $(NAME)
