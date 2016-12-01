@@ -6,7 +6,7 @@
 /*   By: kchetty <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/28 08:34:50 by kchetty           #+#    #+#             */
-/*   Updated: 2016/12/01 12:08:12 by kchetty          ###   ########.fr       */
+/*   Updated: 2016/12/01 12:12:51 by kchetty          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ int  prompt(int dim, int player)
 {
 	int value;
 	move(dim*2+2,0);
-	printw("Player %c enter move: U,D,L,R ",player==0 ? 'A' : 'B');
+	printw("Player %c ",player==0 ? 'A' : 'B');
 	move(curY*2+2,curX*4+1);
 	refresh();
 	noecho();
