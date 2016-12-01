@@ -6,7 +6,7 @@
 /*   By: kchetty <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/28 08:34:50 by kchetty           #+#    #+#             */
-/*   Updated: 2016/12/01 13:45:18 by kchetty          ###   ########.fr       */
+/*   Updated: 2016/12/01 14:46:54 by kchetty          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,6 @@ void paintscreen(int dim)
 
 int  prompt(int dim, int player, t_global *g)
 {
-	//int value;
 	move(dim*2+2,0);
 	printw("Player %c ",player==0 ? 'X' : 'O');
 	move(curY*2+1,curX*4+2);
@@ -85,12 +84,22 @@ int  prompt(int dim, int player, t_global *g)
 			if (player == 0)
 			{
 				if (g->board->set_x(curX, curY))
+				{
 					mvprintw(curY*2+1,curX*4+2, "X");
+					return (1);
+				}
+				else
+					return (-3);
 			}
 			else
 			{
 				if (g->board->set_o(curX, curY))
+				{
 					mvprintw(curY*2+1,curX*4+2, "O");
+					return (1);
+				}
+				else
+					return (-3);
 			}
 			break;
 		case 'q':
@@ -121,10 +130,15 @@ int main()
 	{
 		if((rtn=prompt(dim,player,&g))==-1)
 			break;
-		if(rtn!=-2) {
+		if(rtn == 1) {
 			if (g.board->check_win(player))
 				break ;
 			player=!player;
+		}
+		if (rtn == -3)
+		{
+			move(dim * 2 + 4, 0);
+			printw("Invalid Move");
 		}
 	}
 	endwin();
