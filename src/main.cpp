@@ -6,16 +6,15 @@
 /*   By: kchetty <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/28 08:34:50 by kchetty           #+#    #+#             */
-/*   Updated: 2016/12/01 14:46:54 by kchetty          ###   ########.fr       */
+/*   Updated: 2016/12/01 15:00:17 by kchetty          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "gomoku.h"
 
-//int board[20][20];
 int curX=0,curY=0;
 
-void paintscreen(int dim)
+void draw_screen(int dim)
 {
 
 	int x,y;
@@ -39,21 +38,7 @@ void paintscreen(int dim)
 	refresh();
 }
 
-/*int put_in_cell(int dim, int x, int y, int num)
-{
-	if(x<0 || x>=dim || y<0 || y>=dim)
-		return(1); 
-
-	int cellx,celly;
-	cellx=x*4+1;
-	celly=y*2+2;
-	mvprintw(celly,cellx,"%d",num);
-	printw("%d %d\n",cellx,celly);
-	refresh();
-	return (0);
-}*/
-
-int  prompt(int dim, int player, t_global *g)
+int  keyhook(int dim, int player, t_global *g)
 {
 	move(dim*2+2,0);
 	printw("Player %c ",player==0 ? 'X' : 'O');
@@ -103,9 +88,9 @@ int  prompt(int dim, int player, t_global *g)
 			}
 			break;
 		case 'q':
-			return(-1); // Quit game
+			return(-1);
 		default:
-			return(-2); // Bad key
+			return(-2);
 			break;
 	}
 	move(curY*2+2,curX*4+1);
@@ -118,17 +103,17 @@ int main()
 
 	g.board = new board_class();
 	int dim,rtn,player = 0;
-	initscr();				// Start curses 
-	keypad(stdscr,TRUE);	// Turn on keypad
-	cbreak();				// Disable input buffering
+	initscr();	
+	keypad(stdscr,TRUE);
+	cbreak();			
 
 	dim = 19; 
 	clear();
-	paintscreen(dim);
+	draw_screen(dim);
 
 	while (1)
 	{
-		if((rtn=prompt(dim,player,&g))==-1)
+		if((rtn=keyhook(dim,player,&g))==-1)
 			break;
 		if(rtn == 1) {
 			if (g.board->check_win(player))
