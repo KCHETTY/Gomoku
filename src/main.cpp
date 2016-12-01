@@ -6,7 +6,7 @@
 /*   By: kchetty <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/28 08:34:50 by kchetty           #+#    #+#             */
-/*   Updated: 2016/12/01 12:46:32 by kchetty          ###   ########.fr       */
+/*   Updated: 2016/12/01 12:49:24 by kchetty          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ int  prompt(int dim, int player)
 			if(curY<dim-1)
 				curY++;
 			return(-2);
-		case KEY_ENTER:
+		case '\n':
 			echo();
 			refresh();
 			if (player == 0)
