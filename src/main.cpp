@@ -6,7 +6,7 @@
 /*   By: kchetty <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/28 08:34:50 by kchetty           #+#    #+#             */
-/*   Updated: 2016/12/01 12:12:51 by kchetty          ###   ########.fr       */
+/*   Updated: 2016/12/01 12:33:35 by kchetty          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,13 +55,14 @@ int put_in_cell(int dim, int x, int y, int num)
 
 int  prompt(int dim, int player)
 {
-	int value;
+	//int value;
 	move(dim*2+2,0);
-	printw("Player %c ",player==0 ? 'A' : 'B');
+	printw("Player %c ",player==0 ? 'X' : 'O');
 	move(curY*2+2,curX*4+1);
 	refresh();
 	noecho();
-	switch(getch()) {
+	switch(getch())
+	{
 		case KEY_UP:
 			if(curY>0)
 				curY--;
@@ -80,14 +81,16 @@ int  prompt(int dim, int player)
 			return(-2);
 		case '*':
 			echo();
-			cin >> value;
-			if(value<=4 || value>=204) {
-				mvprintw(curY*2+2,curX*4+1,"   ");
-				refresh();
+			refresh();
+			if (player == 0)
+			{
+				mvprintw(curY*2+1,curX*4+2, "X");
+				board[curX][curY] = 1;
 			}
-			else {
-
-				board[curX][curY]=value;
+			else
+			{
+				mvprintw(curY*2+1,curX*4+2, "O");
+				board[curX][curY] = 2;
 			}
 			break;
 		case 'q':
