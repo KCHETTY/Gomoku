@@ -6,7 +6,7 @@
 /*   By: kchetty <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/28 08:34:50 by kchetty           #+#    #+#             */
-/*   Updated: 2016/12/01 15:00:17 by kchetty          ###   ########.fr       */
+/*   Updated: 2016/12/02 11:26:59 by kchetty          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,20 +18,25 @@ void draw_screen(int dim)
 {
 
 	int x,y;
-	for(y=0;y<dim;y++) {
-		for(x=0;x<dim;x++) {
+
+	for(y = 0; y < dim; y++)
+	{
+		for(x = 0; x < dim; x++) 
+		{
 			printw(" ---");
 		}
 		printw("\n");
-		for(x=0;x<dim;x++) {
+		for(x = 0; x < dim; x++)
+		{
 			printw("|   ");
 		}
-		if(x==dim)
+		if(x == dim)
 			printw("|\n");
 		else
 			printw("\n");	   	   	   	  
 	}
-	for(x=0;x<dim;x++) {
+	for(x = 0; x < dim; x++) 
+	{
 		printw(" ---");
 	}
 	printw("\n");
@@ -48,29 +53,34 @@ int  keyhook(int dim, int player, t_global *g)
 	switch(getch())
 	{
 		case KEY_UP:
-			if(curY>0)
+			if(curY > 0)
 				curY--;
 			return(-2);
 		case KEY_LEFT:
-			if(curX>0)
+			if(curX > 0)
 				curX--;
 			return(-2);
 		case KEY_RIGHT:
-			if(curX<dim-1)
+			if(curX < dim-1)
 				curX++;
 			return(-2);
 		case KEY_DOWN:
-			if(curY<dim-1)
+			if(curY < dim-1)
 				curY++;
 			return(-2);
 		case '\n':
 			echo();
 			refresh();
+			start_color();
 			if (player == 0)
 			{
 				if (g->board->set_x(curX, curY))
 				{
+					init_color(COLOR_RED, 700,0, 700);
+					init_pair(1, COLOR_RED, COLOR_BLACK);
+					attron(COLOR_PAIR(1));
 					mvprintw(curY*2+1,curX*4+2, "X");
+					attroff(COLOR_PAIR(1));
 					return (1);
 				}
 				else
@@ -80,7 +90,11 @@ int  keyhook(int dim, int player, t_global *g)
 			{
 				if (g->board->set_o(curX, curY))
 				{
+					init_color(COLOR_CYAN, 700, 100, 0);
+					init_pair(6, COLOR_CYAN, COLOR_BLACK);
+					attron(COLOR_PAIR(6));
 					mvprintw(curY*2+1,curX*4+2, "O");
+					attroff(COLOR_PAIR(6));
 					return (1);
 				}
 				else
@@ -189,5 +203,5 @@ int main()
 
   }	
 
-return (0);
-}*/
+  return (0);
+  }*/
