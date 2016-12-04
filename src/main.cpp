@@ -12,75 +12,88 @@
 
 #include "gomoku.h"
 
-int curX=0,curY=0;
+//int curX=0,curY=0;
 
-void draw_screen(int dim)
+void draw_screen(int dim, t_global *g)
 {
 
 	int x,y;
-
+	int tmp = 2;
+	
+//	wmove(g->the_board, 1, 4);
 	for(y = 0; y < dim; y++)
 	{
 		for(x = 0; x < dim; x++) 
 		{
-			printw(" ---");
+			if (x == 0)
+				mvwprintw(g->the_board, tmp, 8, " ---");
+			else
+				wprintw(g->the_board, " ---");
 		}
-		printw("\n");
+		wprintw(g->the_board, "\n");
+		tmp++;
 		for(x = 0; x < dim; x++)
 		{
-			printw("|   ");
+			if (x == 0)
+				mvwprintw(g->the_board, tmp, 8, "|   ");
+			else
+				wprintw(g->the_board, "|   ");
 		}
+		tmp++;
 		if(x == dim)
-			printw("|\n");
+			wprintw(g->the_board, "|\n");
 		else
-			printw("\n");	   	   	   	  
+			wprintw(g->the_board, "\n");	   	   	   	  
 	}
 	for(x = 0; x < dim; x++) 
 	{
-		printw(" ---");
+		if (x == 0)
+			mvwprintw(g->the_board, tmp , 8, " ---");
+		else
+			wprintw(g->the_board, " ---");
 	}
-	printw("\n");
-	refresh();
+	wprintw(g->the_board, "\n");
+	wrefresh(g->the_board);
 }
 
 int  keyhook(int dim, int player, t_global *g)
 {
-	move(dim*2+2,0);
-	printw("Player %c ",player==0 ? 'X' : 'O');
-	move(curY*2+1,curX*4+2);
-	refresh();
+	//move(dim*2+2,0);
+	//printw("Player %c ",player==0 ? 'X' : 'O');
+	wmove(g->the_board, g->y*2+3,g->x*4+10);
+	wrefresh(g->the_board);
 	noecho();
-	switch(getch())
+	switch(wgetch(g->the_board))
 	{
 		case KEY_UP:
-			if(curY > 0)
-				curY--;
+			if(g->y > 0)
+				g->y--;
 			return(-2);
 		case KEY_LEFT:
-			if(curX > 0)
-				curX--;
+			if(g->x > 0)
+				g->x--;
 			return(-2);
 		case KEY_RIGHT:
-			if(curX < dim-1)
-				curX++;
+			if(g->x < dim-1)
+				g->x++;
 			return(-2);
 		case KEY_DOWN:
-			if(curY < dim-1)
-				curY++;
+			if(g->y < dim-1)
+				g->y++;
 			return(-2);
 		case '\n':
 			echo();
-			refresh();
+			wrefresh(g->the_board);
 			start_color();
 			if (player == 0)
 			{
-				if (g->board->set_x(curX, curY))
+				if (g->board->set_x(g->x, g->y))
 				{
 					init_color(COLOR_RED, 700,0, 700);
 					init_pair(1, COLOR_RED, COLOR_BLACK);
-					attron(COLOR_PAIR(1));
-					mvprintw(curY*2+1,curX*4+2, "X");
-					attroff(COLOR_PAIR(1));
+					wattron(g->the_board, COLOR_PAIR(1));
+					mvwprintw(g->the_board, g->y*2+3,g->x*4+10, "X");
+					wattroff(g->the_board, COLOR_PAIR(1));
 					return (1);
 				}
 				else
@@ -88,13 +101,13 @@ int  keyhook(int dim, int player, t_global *g)
 			}
 			else
 			{
-				if (g->board->set_o(curX, curY))
+				if (g->board->set_o(g->x, g->y))
 				{
 					init_color(COLOR_CYAN, 700, 100, 0);
 					init_pair(6, COLOR_CYAN, COLOR_BLACK);
-					attron(COLOR_PAIR(6));
-					mvprintw(curY*2+1,curX*4+2, "O");
-					attroff(COLOR_PAIR(6));
+					wattron(g->the_board, COLOR_PAIR(6));
+					mvwprintw(g->the_board, g->y*2+3,g->x*4+10, "O");
+					wattroff(g->the_board ,COLOR_PAIR(6));
 					return (1);
 				}
 				else
@@ -107,24 +120,72 @@ int  keyhook(int dim, int player, t_global *g)
 			return(-2);
 			break;
 	}
-	move(curY*2+2,curX*4+1);
-	refresh();
+	wmove(g->the_board, g->y*2+3,g->x*4+10);
+	wrefresh(g->the_board);
 	return(0);
 }
+
+void draw_borders(WINDOW *screen) 
+{ 
+	int x, y, i; 
+	getmaxyx(screen, y, x); 
+	
+	// 4 corners 
+	mvwprintw(screen, 0, 0, "+"); 
+	mvwprintw(screen, y - 1, 0, "+"); 
+	mvwprintw(screen, 0, x - 1, "+"); 
+	mvwprintw(screen, y - 1, x - 1, "+"); 
+	
+	// sides 
+	for (i = 1; i < (y - 1); i++) 
+	{ 
+			mvwprintw(screen, i, 0, "|"); 
+			mvwprintw(screen, i, x - 1, "|"); 
+	} 
+
+	// top and bottom 
+	for (i = 1; i < (x - 1); i++) 
+	{ 
+			mvwprintw(screen, 0, i, "-"); 
+			mvwprintw(screen, y - 1, i, "-"); 
+	}
+
+	wrefresh(screen); 
+}
+
+void	init(t_global *g)
+{
+	g->x = 0;
+  g->y = 0;
+  g->board = new board_class();
+
+	initscr();
+	noecho();
+  cbreak();
+}
+
 int main() 
 {
 	t_global g;
 
-	g.board = new board_class();
 	int dim,rtn,player = 0;
-	initscr();	
-	keypad(stdscr,TRUE);
-	cbreak();			
+	int parent_x = 0, parent_y = 0;
+	
+	init(&g);
+	//get our maximun window dimensions
+	getmaxyx(stdscr, parent_y, parent_x);
 
+	g.header = newwin(parent_y - 44, parent_x, 0, 0);
+	g.the_board = newwin(parent_y - 8, parent_x, 6, 0);
+
+	draw_borders(g.header);
+	draw_borders(g.the_board);
+  
+keypad(g.the_board,TRUE);
 	dim = 19; 
-	clear();
-	draw_screen(dim);
+	//clear();
 
+	draw_screen(dim, &g);
 	while (1)
 	{
 		if((rtn=keyhook(dim,player,&g))==-1)
@@ -140,68 +201,9 @@ int main()
 			printw("Invalid Move");
 		}
 	}
+	delwin(g.the_board);
 	endwin();
 
 	printf("HAHAHAHAHA SOMEONE WON");
 	return (0);
 }
-
-/*int	main()
-  {
-  board_class *board = new board_class();
-  int win = 1;
-  int counter = 0;
-  int x , y;
-
-  board->display();
-
-
-  while(win)
-  {
-  if (counter % 2 == 0)
-  {
-  cout << "player O" << endl;
-  cout << "X" << endl;
-  cin >> x;
-  cout << "Y" << endl;
-  cin >> y ;
-  if (board->set_o(x, y))
-  {
-  counter++;
-  board->display();
-  }
-  else
-  cout << "invalid move" << endl;
-
-  if (board->check_win(1))
-  {
-  cout << "PLAYER O WINS!!" << endl;
-  break ;
-  }
-  }
-  else
-  {
-  cout << "player X" << endl;
-  cout << "X" << endl;
-  cin >> x;
-  cout << "Y" << endl;
-  cin >> y;
-  if (board->set_x(x, y))
-  {
-  counter--;
-  board->display();
-  }
-  else
-  cout << "invalid move" << endl;	
-
-  if (board->check_win(2))
-  {
-  cout << "PLAYER X WINS!!" << endl;
-  break ;
-  }
-  }
-
-  }	
-
-  return (0);
-  }*/

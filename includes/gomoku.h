@@ -29,6 +29,9 @@ typedef struct s_global
 {
 	board_class *board;
 	WINDOW		*the_board;
+	WINDOW		*header;
+	int				x;
+	int				y;
 }			   t_global;
 
 #endif
