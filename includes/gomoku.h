@@ -23,15 +23,15 @@
 # include <regex>
 # include "board.class.h"
 
-using namespace std;
+using namespace	std;
 
-typedef struct s_global
+typedef struct	s_global
 {
-	board_class *board;
-	WINDOW		*the_board;
-	WINDOW		*header;
-	int				x;
-	int				y;
-}			   t_global;
+	board_class		*board;
+	WINDOW				*the_board;
+	WINDOW				*header;
+	int						x;
+	int						y;
+}								t_global;
 
 #endif

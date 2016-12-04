@@ -18,15 +18,19 @@ void draw_screen(int dim, t_global *g)
 {
 
 	int x,y;
+	int win_y, win_x;
 	int tmp = 2;
-	
+
+		
+	getmaxyx(g->the_board, win_y, win_x);
+	mvwprintw(g->the_board, 1, 1,  "teh x: %d AND WIN_Y: %d\n ", win_x  ,win_y);
 //	wmove(g->the_board, 1, 4);
 	for(y = 0; y < dim; y++)
 	{
 		for(x = 0; x < dim; x++) 
 		{
 			if (x == 0)
-				mvwprintw(g->the_board, tmp, 8, " ---");
+				mvwprintw(g->the_board, tmp, ((win_x - 75) / 2), " ---");
 			else
 				wprintw(g->the_board, " ---");
 		}
@@ -35,7 +39,7 @@ void draw_screen(int dim, t_global *g)
 		for(x = 0; x < dim; x++)
 		{
 			if (x == 0)
-				mvwprintw(g->the_board, tmp, 8, "|   ");
+				mvwprintw(g->the_board, tmp, ((win_x - 75) / 2), "|   ");
 			else
 				wprintw(g->the_board, "|   ");
 		}
@@ -48,7 +52,7 @@ void draw_screen(int dim, t_global *g)
 	for(x = 0; x < dim; x++) 
 	{
 		if (x == 0)
-			mvwprintw(g->the_board, tmp , 8, " ---");
+			mvwprintw(g->the_board, tmp , ((win_x - 75) / 2), " ---");
 		else
 			wprintw(g->the_board, " ---");
 	}
@@ -56,11 +60,47 @@ void draw_screen(int dim, t_global *g)
 	wrefresh(g->the_board);
 }
 
+void	redraw_stuff(t_global *g)
+{
+		int y = 0, x = 0;
+		int win_y, win_x;
+  	getmaxyx(g->the_board, win_y, win_x);
+		start_color();
+  	win_y -= win_y;	
+		wmove(g->the_board, y*2+3,x*4 + ((win_x - 75) / 2) + 2);
+		for (y = 0; y < 19; y++)
+		{
+				for (x = 0; x < 19; x++)
+				{
+						if (g->board->get(x, y) == 0)
+						{
+								init_color(COLOR_RED, 700,0, 700);
+          			init_pair(1, COLOR_RED, COLOR_BLACK);
+          			wattron(g->the_board, COLOR_PAIR(1));
+          			mvwprintw(g->the_board, y*2+3,x*4+ ((win_x - 75) / 2) + 2, "X");
+          			wattroff(g->the_board, COLOR_PAIR(1));
+						}
+						else if (g->board->get(x, y) == 1)
+						{
+								init_color(COLOR_CYAN, 700, 100, 0);
+          			init_pair(6, COLOR_CYAN, COLOR_BLACK);
+          			wattron(g->the_board, COLOR_PAIR(6));
+         		 		mvwprintw(g->the_board, y*2+3,x*4+((win_x - 75) / 2) + 2, "O");
+          			wattroff(g->the_board ,COLOR_PAIR(6));
+						}
+				}
+		}
+		wrefresh(g->the_board);
+}	
+
 int  keyhook(int dim, int player, t_global *g)
 {
 	//move(dim*2+2,0);
-	//printw("Player %c ",player==0 ? 'X' : 'O');
-	wmove(g->the_board, g->y*2+3,g->x*4+10);
+	int win_y, win_x;
+	getmaxyx(g->the_board, win_y, win_x);
+	win_y -= win_y;
+	mvwprintw(g->the_board, dim * 2 + 4, 2, "Make you move: Player %c ",player==0 ? 'X' : 'O');
+	wmove(g->the_board, g->y*2+3,g->x*4 + ((win_x - 75) / 2) + 2);
 	wrefresh(g->the_board);
 	noecho();
 	switch(wgetch(g->the_board))
@@ -92,7 +132,7 @@ int  keyhook(int dim, int player, t_global *g)
 					init_color(COLOR_RED, 700,0, 700);
 					init_pair(1, COLOR_RED, COLOR_BLACK);
 					wattron(g->the_board, COLOR_PAIR(1));
-					mvwprintw(g->the_board, g->y*2+3,g->x*4+10, "X");
+					mvwprintw(g->the_board, g->y*2+3,g->x*4+ ((win_x - 75) / 2) + 2, "X");
 					wattroff(g->the_board, COLOR_PAIR(1));
 					return (1);
 				}
@@ -106,7 +146,7 @@ int  keyhook(int dim, int player, t_global *g)
 					init_color(COLOR_CYAN, 700, 100, 0);
 					init_pair(6, COLOR_CYAN, COLOR_BLACK);
 					wattron(g->the_board, COLOR_PAIR(6));
-					mvwprintw(g->the_board, g->y*2+3,g->x*4+10, "O");
+					mvwprintw(g->the_board, g->y*2+3,g->x*4+((win_x - 75) / 2) + 2, "O");
 					wattroff(g->the_board ,COLOR_PAIR(6));
 					return (1);
 				}
@@ -120,7 +160,7 @@ int  keyhook(int dim, int player, t_global *g)
 			return(-2);
 			break;
 	}
-	wmove(g->the_board, g->y*2+3,g->x*4+10);
+	wmove(g->the_board, g->y*2+3,g->x*4+((win_x - 75) / 2) + 2);
 	wrefresh(g->the_board);
 	return(0);
 }
@@ -169,14 +209,14 @@ int main()
 	t_global g;
 
 	int dim,rtn,player = 0;
-	int parent_x = 0, parent_y = 0;
+	int parent_x = 0, parent_y = 0, new_x, new_y;
 	
 	init(&g);
 	//get our maximun window dimensions
 	getmaxyx(stdscr, parent_y, parent_x);
 
 	g.header = newwin(parent_y - 44, parent_x, 0, 0);
-	g.the_board = newwin(parent_y - 8, parent_x, 6, 0);
+	g.the_board = newwin(parent_y - 7, parent_x, 7, 0);
 
 	draw_borders(g.header);
 	draw_borders(g.the_board);
@@ -188,7 +228,23 @@ keypad(g.the_board,TRUE);
 	draw_screen(dim, &g);
 	while (1)
 	{
-		if((rtn=keyhook(dim,player,&g))==-1)
+		getmaxyx(stdscr, new_y, new_x);
+    if (new_y != parent_y || new_x != parent_x)
+		{
+       	parent_x = new_x;
+        parent_y = new_y;
+        wresize(g.header, new_y - 44, new_x);
+        wresize(g.the_board, new_y - 7, new_x);
+       	mvwin(g.the_board, new_y - 7, 0);
+        wclear(stdscr);
+        wclear(g.the_board);
+        wclear(g.header);
+				draw_screen(dim, &g);
+        draw_borders(g.the_board);
+        draw_borders(g.header);
+				redraw_stuff(&g);
+    }
+		if((rtn=keyhook(dim,player, &g))==-1)
 			break;
 		if(rtn == 1) {
 			if (g.board->check_win(player))
@@ -202,6 +258,7 @@ keypad(g.the_board,TRUE);
 		}
 	}
 	delwin(g.the_board);
+	delwin(g.header);
 	endwin();
 
 	printf("HAHAHAHAHA SOMEONE WON");
