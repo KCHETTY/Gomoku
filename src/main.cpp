@@ -193,6 +193,35 @@ void draw_borders(WINDOW *screen)
 	wrefresh(screen); 
 }
 
+void	create_menu()
+{
+		int max_x, max_y;
+		
+		getmaxyx(stdscr, max_y, max_x);
+		WINDOW *menu = newwin(max_y, max_x, 0, 0);
+		
+		start_color();
+		draw_borders(menu);
+		//init_pair(6, COLOR_CYAN, COLOR_BLACK, COLOR_);
+    wattron(menu, COLOR_PAIR(6));
+ 		mvwprintw(menu,1, 17, "    _____\n");
+		wattroff(menu, COLOR_PAIR(6));
+    //wattron(menu, COLOR_PAIR(6));
+		mvwprintw(menu,2, 17, " __|___  |__  _____  ____    __  _____  __  __  __   _\n");
+		mvwprintw(menu,3, 17, "|   ___|    |/     \\|    \\  /  |/     \\|  |/ / |  | | |\n");
+		mvwprintw(menu,4, 17, "|   |  |    ||     ||     \\/   ||     ||     \\ |  |_| |\n");
+		mvwprintw(menu,5, 17, "|______|  __|\\_____/|__/\\__/|__|\\_____/|__|\\__\\|______|\n");
+		mvwprintw(menu,6, 17, "  |_____|\n");
+		//mvwprintw(menu,6, 13,	"!!! !!&!!  !&!  !!!  !&!   ! !&!  !&!  !!!  !!&!!!    !&!  !!!\n");
+		//mvwprintw(menu,7,	13,":!!   !!:  !!:  !!!  !!:     !!:  !!:  !!!  !!: :!!   !!:  !!!\n");
+		//mvwprintw(menu,8,	13, ":!:   !::  :!:  !:!  :!:     :!:  :!:  !:!  :!:  !:!  :!:  !:!\n");
+		//mvwprintw(menu,9,	13, ":::  ::::  ::::: ::  :::     ::   ::::: ::   ::  :::  ::::: ::\n");
+		//mvwprintw(menu,10, 13, " :: :: :    : :  :    :      :     : :  :    :   :::   : :  :\n");
+		
+		while (1)	
+			wrefresh(menu);
+}
+
 void	init(t_global *g)
 {
 	g->x = 0;
@@ -212,6 +241,8 @@ int main()
 	int parent_x = 0, parent_y = 0, new_x, new_y;
 	
 	init(&g);
+
+	create_menu();
 	//get our maximun window dimensions
 	getmaxyx(stdscr, parent_y, parent_x);
 
