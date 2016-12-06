@@ -6,7 +6,7 @@
 /*   By: kchetty <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/28 08:35:01 by kchetty           #+#    #+#             */
-/*   Updated: 2016/12/02 10:37:12 by kchetty          ###   ########.fr       */
+/*   Updated: 2016/12/05 11:14:23 by kchetty          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,13 +25,13 @@
 
 using namespace	std;
 
-typedef struct	s_global
+typedef struct		s_global
 {
 	board_class		*board;
-	WINDOW				*the_board;
-	WINDOW				*header;
-	int						x;
-	int						y;
-}								t_global;
+	WINDOW			*the_board;
+	WINDOW			*header;
+	int				x;
+	int				y;
+}					t_global;
 
 #endif
