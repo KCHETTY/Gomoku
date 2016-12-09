@@ -6,7 +6,7 @@
 /*   By: kchetty <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/28 08:34:50 by kchetty           #+#    #+#             */
-/*   Updated: 2016/12/09 10:37:08 by kchetty          ###   ########.fr       */
+/*   Updated: 2016/12/09 10:44:37 by kchetty          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,6 @@ void	redraw_stuff(t_global *g)
 	int win_y, win_x;
 	getmaxyx(g->the_board, win_y, win_x);
 	start_color();
-	win_y -= win_y;	
 	wmove(g->the_board, y*2+((win_y / 2) - (38 / 2)) + 1, x*4 + ((win_x / 2) - (77 / 2)) + 2);
 	for (y = 0; y < 19; y++)
 	{
