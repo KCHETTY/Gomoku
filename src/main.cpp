@@ -6,7 +6,7 @@
 /*   By: kchetty <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/28 08:34:50 by kchetty           #+#    #+#             */
-/*   Updated: 2016/12/09 10:44:37 by kchetty          ###   ########.fr       */
+/*   Updated: 2016/12/09 11:02:47 by kchetty          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -229,6 +229,23 @@ void	init(t_global *g)
 	cbreak();
 }
 
+void	draw_header(t_global *g)
+{
+	int win_y, win_x;
+
+	getmaxyx(g->header, win_y, win_x);
+
+	mvwprintw(g->header,(win_y / 2) - 3, ((win_x / 2) - (52 / 2)), "# #     #   # ######### #   #            ##########\n");
+	mvwprintw(g->header,(win_y / 2) - 2, ((win_x / 2) - (52 / 2)), " #   #  #   #         # #   #   ######            #\n");
+	mvwprintw(g->header,(win_y / 2) - 1, ((win_x / 2) - (52 / 2)),  "# # #   #   #         # #   #        #           # \n");
+	mvwprintw(g->header,(win_y / 2), ((win_x / 2) - (52 / 2)), "   #    #   # ########  #   #        #   ########  \n");
+	mvwprintw(g->header,(win_y / 2) + 1, ((win_x / 2) - (52 / 2)),  "  # #      #         #     #         #       ##    \n");
+	mvwprintw(g->header,(win_y / 2) + 2, ((win_x / 2) - (52 / 2)), " #   #    #          #    #   ##########   ##      \n");
+	mvwprintw(g->header,(win_y / 2) + 3, ((win_x / 2) - (52 / 2)),  "      # ##    ########  ##               ##        \n");
+
+	wrefresh(g->header);
+}
+
 int main() 
 {
 	t_global g;
@@ -252,6 +269,7 @@ int main()
 	keypad(g.the_board,TRUE);
 	dim = 19; 
 
+	draw_header(&g);
 	draw_screen(dim, &g);
 	while (1)
 	{
@@ -269,6 +287,7 @@ int main()
 			wclear(g.header);
 			draw_borders(g.the_board);
 			draw_borders(g.header);
+			draw_header(&g);
 			draw_screen(dim, &g);
 			redraw_stuff(&g);
 		}
