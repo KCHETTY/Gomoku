@@ -6,7 +6,7 @@
 /*   By: kchetty <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/28 08:34:50 by kchetty           #+#    #+#             */
-/*   Updated: 2016/12/09 11:02:47 by kchetty          ###   ########.fr       */
+/*   Updated: 2016/12/09 11:09:02 by kchetty          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,10 @@ void draw_screen(int dim, t_global *g)
 		for(x = 0; x < dim; x++) 
 		{
 			if (x == 0)
-				mvwprintw(g->the_board, tmp, ((win_x / 2) - (77 / 2)), " ---");
+			{
+				mvwprintw(g->the_board, tmp, ((win_x / 2) - (77 / 2)), "%d ", y);
+				mvwprintw(g->the_board, tmp, ((win_x / 2) - (79 / 2)), " ---");
+			}
 			else
 				wprintw(g->the_board, " ---");
 		}
