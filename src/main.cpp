@@ -6,13 +6,11 @@
 /*   By: kchetty <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/28 08:34:50 by kchetty           #+#    #+#             */
-/*   Updated: 2016/12/06 13:42:00 by kchetty          ###   ########.fr       */
+/*   Updated: 2016/12/09 09:43:18 by kchetty          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "gomoku.h"
-
-//int curX=0,curY=0;
 
 void draw_screen(int dim, t_global *g)
 {
@@ -22,9 +20,8 @@ void draw_screen(int dim, t_global *g)
 	int tmp = 9;
 
 
-	getmaxyx(g->the_board, win_y, win_x);
+	getmaxyx(stdscr, win_y, win_x);
 	mvwprintw(g->the_board, 2, 2,  "teh x: %d AND WIN_Y: %d\n ", win_x  ,win_y);
-	//	wmove(g->the_board, 1, 4);
 	for(y = 0; y < dim; y++)
 	{
 		for(x = 0; x < dim; x++) 
@@ -95,7 +92,6 @@ void	redraw_stuff(t_global *g)
 
 int  keyhook(int dim, int player, t_global *g)
 {
-	//move(dim*2+2,0);
 	int win_y, win_x;
 	getmaxyx(g->the_board, win_y, win_x);
 	win_y -= win_y;
@@ -246,8 +242,8 @@ int main()
 	//get our maximun window dimensions
 	getmaxyx(stdscr, parent_y, parent_x);
 
-	g.header = newwin(parent_y - 44, parent_x, 0, 0);
-	g.the_board = newwin(parent_y - 15, parent_x, 15, 0);
+	g.header = newwin(((parent_y / 4)), parent_x, 0, 0);
+	g.the_board = newwin(parent_y - (parent_y / 4) + 1, parent_x, (parent_y / 4) - 1, 0);
 
 	wclear(g.the_board);
 	draw_borders(g.header);
@@ -264,14 +260,14 @@ int main()
 		{
 			parent_x = new_x;
 			parent_y = new_y;
-			wresize(g.header, new_y - 44, new_x);
-			wresize(g.the_board, new_y - 15, new_x);
+			wresize(g.header, ((new_y / 4)), new_x);
 			mvwin(g.header, 0, 0);
-			mvwin(g.the_board, 15, 0);
+			wresize(g.the_board, new_y - (new_y / 4) + 1, new_x);
+			mvwin(g.the_board, (new_y / 4) - 1, 0);
 			wclear(stdscr);
 			wclear(g.the_board);
 			wclear(g.header);
-			draw_borders(g.the_board);
+			//draw_borders(g.the_board);
 			draw_borders(g.header);
 			draw_screen(dim, &g);
 			redraw_stuff(&g);
