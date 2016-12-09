@@ -6,7 +6,7 @@
 /*   By: kchetty <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/28 08:34:50 by kchetty           #+#    #+#             */
-/*   Updated: 2016/12/09 09:43:18 by kchetty          ###   ########.fr       */
+/*   Updated: 2016/12/09 10:01:59 by kchetty          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ void draw_screen(int dim, t_global *g)
 		for(x = 0; x < dim; x++) 
 		{
 			if (x == 0)
-				mvwprintw(g->the_board, tmp, ((win_x - 80) / 2), " ---");
+				mvwprintw(g->the_board, tmp, ((win_x / 2) - (77 / 2)), " ---");
 			else
 				wprintw(g->the_board, " ---");
 		}
@@ -36,7 +36,7 @@ void draw_screen(int dim, t_global *g)
 		for(x = 0; x < dim; x++)
 		{
 			if (x == 0)
-				mvwprintw(g->the_board, tmp, ((win_x - 80) / 2), "|   ");
+				mvwprintw(g->the_board, tmp, ((win_x / 2) - (77 / 2)), "|   ");
 			else
 				wprintw(g->the_board, "|   ");
 		}
@@ -49,7 +49,7 @@ void draw_screen(int dim, t_global *g)
 	for(x = 0; x < dim; x++) 
 	{
 		if (x == 0)
-			mvwprintw(g->the_board, tmp , ((win_x - 80) / 2), " ---");
+			mvwprintw(g->the_board, tmp , ((win_x / 2) - (77 / 2)), " ---");
 		else
 			wprintw(g->the_board, " ---");
 	}
@@ -64,7 +64,7 @@ void	redraw_stuff(t_global *g)
 	getmaxyx(g->the_board, win_y, win_x);
 	start_color();
 	win_y -= win_y;	
-	wmove(g->the_board, y*2+9, x*4 + ((win_x - 80) / 2) + 2);
+	wmove(g->the_board, y*2+10, x*4 + ((win_x / 2) - (77 / 2)) + 2);
 	for (y = 0; y < 19; y++)
 	{
 		for (x = 0; x < 19; x++)
@@ -74,7 +74,7 @@ void	redraw_stuff(t_global *g)
 				init_color(COLOR_RED, 700,0, 700);
 				init_pair(1, COLOR_RED, COLOR_BLACK);
 				wattron(g->the_board, COLOR_PAIR(1));
-				mvwprintw(g->the_board, y*2+9,x*4+ ((win_x - 80) / 2) + 2, "X");
+				mvwprintw(g->the_board, y*2+10,x*4+ ((win_x / 2) - (77 / 2)) + 2, "X");
 				wattroff(g->the_board, COLOR_PAIR(1));
 			}
 			else if (g->board->get(x, y) == 1)
@@ -82,7 +82,7 @@ void	redraw_stuff(t_global *g)
 				init_color(COLOR_CYAN, 700, 100, 0);
 				init_pair(6, COLOR_CYAN, COLOR_BLACK);
 				wattron(g->the_board, COLOR_PAIR(6));
-				mvwprintw(g->the_board, y*2+9,x*4+((win_x - 80) / 2) + 2, "O");
+				mvwprintw(g->the_board, y*2+10, x*4+ ((win_x / 2) - (77 / 2)) + 2, "O");
 				wattroff(g->the_board ,COLOR_PAIR(6));
 			}
 		}
@@ -96,7 +96,7 @@ int  keyhook(int dim, int player, t_global *g)
 	getmaxyx(g->the_board, win_y, win_x);
 	win_y -= win_y;
 	mvwprintw(g->the_board, dim * 2 + 17, ((win_x - 24) / 2), "Make you move: Player %c ",player==0 ? 'X' : 'O');
-	wmove(g->the_board, g->y*2+10,g->x*4 + ((win_x - 80) / 2) + 2);
+	wmove(g->the_board, g->y*2+10, g->x*4 + ((win_x / 2) - (77 / 2)) + 2);
 	wrefresh(g->the_board);
 	noecho();
 	switch(wgetch(g->the_board))
@@ -128,7 +128,7 @@ int  keyhook(int dim, int player, t_global *g)
 					//init_color(COLOR_RED, 700,0, 100);
 					init_pair(1, COLOR_RED, COLOR_BLACK);
 					wattron(g->the_board, COLOR_PAIR(1));
-					mvwprintw(g->the_board, g->y*2+10,g->x*4+ ((win_x - 80) / 2) + 2, "X");
+					mvwprintw(g->the_board, g->y*2+10,g->x*4+ ((win_x / 2) - (77 / 2)) + 2, "X");
 					wattroff(g->the_board, COLOR_PAIR(1));
 					return (1);
 				}
@@ -142,7 +142,7 @@ int  keyhook(int dim, int player, t_global *g)
 					//init_color(COLOR_CYAN, 700, 100, 0);
 					init_pair(6, COLOR_CYAN, COLOR_BLACK);
 					wattron(g->the_board, COLOR_PAIR(6));
-					mvwprintw(g->the_board, g->y*2+10,g->x*4+((win_x - 80) / 2) + 2, "O");
+					mvwprintw(g->the_board, g->y*2+10,g->x*4+ ((win_x / 2) - (77 / 2)) + 2, "O");
 					wattroff(g->the_board ,COLOR_PAIR(6));
 					return (1);
 				}
