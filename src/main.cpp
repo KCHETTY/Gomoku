@@ -6,7 +6,7 @@
 /*   By: kchetty <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/28 08:34:50 by kchetty           #+#    #+#             */
-/*   Updated: 2016/12/09 11:09:02 by kchetty          ###   ########.fr       */
+/*   Updated: 2016/12/10 11:24:39 by kchetty          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -240,17 +240,17 @@ void	draw_header(t_global *g)
 	int win_y, win_x;
 
 	start_color();
-	init_pair(1, COLOR_GREEN, COLOR_BLACK);
+	init_pair(9, COLOR_GREEN, COLOR_BLACK);
 	init_pair(2, COLOR_CYAN, COLOR_BLACK);
 	init_pair(3, COLOR_RED, COLOR_BLACK);
  	init_pair(4, COLOR_MAGENTA, COLOR_BLACK);
 	init_pair(5, COLOR_YELLOW, COLOR_BLACK);
-	init_pair(6, COLOR_BLUE, COLOR_BLACK);
+	init_pair(8, COLOR_BLUE, COLOR_BLACK);
 	getmaxyx(g->header, win_y, win_x);
 
-	wattron(g->header, COLOR_PAIR(1));
+	wattron(g->header, COLOR_PAIR(9));
 	mvwprintw(g->header,(win_y / 2) - 3, ((win_x / 2) - (52 / 2)), "# #     #   # ######### #   #            ##########\n");
-	wattroff(g->header, COLOR_PAIR(1));
+	wattroff(g->header, COLOR_PAIR(9));
 
 	wattron(g->header, COLOR_PAIR(4));
 	mvwprintw(g->header,(win_y / 2) - 2, ((win_x / 2) - (52 / 2)), " #   #  #   #         # #   #   ######            #\n");
@@ -270,9 +270,9 @@ void	draw_header(t_global *g)
 	mvwprintw(g->header,(win_y / 2) + 2, ((win_x / 2) - (52 / 2)), " #   #    #          #    #   ##########   ##      \n");
 	wattroff(g->header, COLOR_PAIR(5));
 
-	wattron(g->header, COLOR_PAIR(6));
+	wattron(g->header, COLOR_PAIR(8));
 	mvwprintw(g->header,(win_y / 2) + 3, ((win_x / 2) - (52 / 2)),  "      # ##    ########  ##               ##        \n");
-	 wattroff(g->header, COLOR_PAIR(6));
+	 wattroff(g->header, COLOR_PAIR(8));
 
 	wrefresh(g->header);
 }
@@ -324,8 +324,14 @@ int main()
 		}
 		if((rtn=keyhook(dim,player, &g))==-1)
 			break;
+		if (g.board->check_capture(player))
+		{
+			wclear(g.the_board);
+			draw_screen(dim, &g);
+			redraw_stuff(&g);
+		}
 		if(rtn == 1) {
-			if (g.board->check_win(player))
+			if (g.board->check_win(player) || g.board->return_cap(player) == 5)
 				break ;
 			player=!player;
 		}
