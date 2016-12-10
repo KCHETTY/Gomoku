@@ -75,7 +75,7 @@ class board_class
 				{
 					if (this->board[y][x] == player)
 					{
-						for (int checks = 0; checks < 8; checks++)
+						for (int checks = 0; checks < 4; checks++)
 						{
 							if (count != 5)
 							{
@@ -84,15 +84,15 @@ class board_class
 								tmp_y = y;
 								for (int run = 0; run < 5; run++)
 								{
-									if (checks == 0)
+									/*if (checks == 0)
 									{
 										if (this->board[tmp_y][tmp_x] == player && tmp_x - 1 != -1)
 										{
 											count++;
 											tmp_x -= 1;
 										}
-									}
-									if (checks == 1)
+									}*/
+									if (checks == 0)
 									{
 										if (this->board[tmp_y][tmp_x] == player && tmp_x + 1 != 20)
 										{
@@ -100,24 +100,24 @@ class board_class
 											tmp_x += 1;
 										}
 									}
-									if (checks == 2)
+									/*if (checks == 2)
 									{
 										if (this->board[tmp_y][tmp_x] == player && tmp_y - 1 != -1)
 										{
 											count++;
 											tmp_y -= 1;
 										}
-									}
-									if (checks == 3)
+									}*/
+									if (checks == 1)
 									{
 										if (this->board[tmp_y][tmp_x] == player && tmp_y + 1 != 20)
 										{
 											count++;
-											tmp_x += 1;
+											tmp_y += 1;
 										}
 									}
 
-									if (checks == 4)
+									if (checks == 2)
 									{
 										if (this->board[tmp_y][tmp_x] == player && tmp_x + 1 != 20 && tmp_y + 1!= 20)
 										{
@@ -126,7 +126,7 @@ class board_class
 											tmp_x += 1;
 										}
 									}
-									if (checks == 5)
+									if (checks == 3)
 									{
 										if (this->board[tmp_y][tmp_x] == player && tmp_x - 1 != -1 && tmp_y + 1!= 20)
 										{
@@ -135,7 +135,7 @@ class board_class
 											tmp_y += 1;
 										}
 									}
-									if (checks == 6)
+									/*if (checks == 6)
 									{
 										if (this->board[tmp_y][tmp_x] == player && tmp_x + 1 != 20 && tmp_y - 1!= -1)
 										{
@@ -143,8 +143,8 @@ class board_class
 											tmp_x += 1;
 											tmp_y -= 1;
 										}
-									}
-									if (checks == 7)
+									}*/
+									/*if (checks == 7)
 									{
 										if (this->board[tmp_y][tmp_x] == player && tmp_x - 1 != -1 && tmp_y -1 != -1)
 										{
@@ -152,7 +152,7 @@ class board_class
 											tmp_x -= 1;
 											tmp_y -= 1;
 										}
-									}
+									}*/
 								}
 							}
 							else

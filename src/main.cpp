@@ -29,7 +29,7 @@ void draw_screen(int dim, t_global *g)
 		{
 			if (x == 0)
 			{
-				mvwprintw(g->the_board, tmp, ((win_x / 2) - (77 / 2)), "%d ", y);
+				//mvwprintw(g->the_board, tmp - 1, ((win_x / 2) - (79 / 2) + 1), "%d", y + 1);
 				mvwprintw(g->the_board, tmp, ((win_x / 2) - (79 / 2)), " ---");
 			}
 			else
@@ -40,7 +40,10 @@ void draw_screen(int dim, t_global *g)
 		for(x = 0; x < dim; x++)
 		{
 			if (x == 0)
-				mvwprintw(g->the_board, tmp, ((win_x / 2) - (77 / 2)), "|   ");
+			{
+					//mvwprintw(g->the_board, tmp, ((win_x / 2) - (77 / 2)), "|   ");
+					mvwprintw(g->the_board, tmp, ((win_x / 2) - (77 / 2)), "|   ");
+			}
 			else
 				wprintw(g->the_board, "|   ");
 		}
@@ -236,15 +239,40 @@ void	draw_header(t_global *g)
 {
 	int win_y, win_x;
 
+	start_color();
+	init_pair(1, COLOR_GREEN, COLOR_BLACK);
+	init_pair(2, COLOR_CYAN, COLOR_BLACK);
+	init_pair(3, COLOR_RED, COLOR_BLACK);
+ 	init_pair(4, COLOR_MAGENTA, COLOR_BLACK);
+	init_pair(5, COLOR_YELLOW, COLOR_BLACK);
+	init_pair(6, COLOR_BLUE, COLOR_BLACK);
 	getmaxyx(g->header, win_y, win_x);
 
+	wattron(g->header, COLOR_PAIR(1));
 	mvwprintw(g->header,(win_y / 2) - 3, ((win_x / 2) - (52 / 2)), "# #     #   # ######### #   #            ##########\n");
+	wattroff(g->header, COLOR_PAIR(1));
+
+	wattron(g->header, COLOR_PAIR(4));
 	mvwprintw(g->header,(win_y / 2) - 2, ((win_x / 2) - (52 / 2)), " #   #  #   #         # #   #   ######            #\n");
+	wattroff(g->header, COLOR_PAIR(4));
+
+	wattron(g->header, COLOR_PAIR(2));
 	mvwprintw(g->header,(win_y / 2) - 1, ((win_x / 2) - (52 / 2)),  "# # #   #   #         # #   #        #           # \n");
+	wattroff(g->header, COLOR_PAIR(2));	
+
+	wattron(g->header, COLOR_PAIR(3));
 	mvwprintw(g->header,(win_y / 2), ((win_x / 2) - (52 / 2)), "   #    #   # ########  #   #        #   ########  \n");
+	wattroff(g->header, COLOR_PAIR(3));
+
 	mvwprintw(g->header,(win_y / 2) + 1, ((win_x / 2) - (52 / 2)),  "  # #      #         #     #         #       ##    \n");
+
+	wattron(g->header, COLOR_PAIR(5));
 	mvwprintw(g->header,(win_y / 2) + 2, ((win_x / 2) - (52 / 2)), " #   #    #          #    #   ##########   ##      \n");
+	wattroff(g->header, COLOR_PAIR(5));
+
+	wattron(g->header, COLOR_PAIR(6));
 	mvwprintw(g->header,(win_y / 2) + 3, ((win_x / 2) - (52 / 2)),  "      # ##    ########  ##               ##        \n");
+	 wattroff(g->header, COLOR_PAIR(6));
 
 	wrefresh(g->header);
 }
