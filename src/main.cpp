@@ -277,31 +277,31 @@ void	draw_header(t_global *g)
 	wrefresh(g->header);
 }
 
-int main() 
+int pvp(t_global *g) 
 {
-	t_global g;
+	//t_global g;
 
 	int dim,rtn,player = 0;
 	int parent_x = 0, parent_y = 0, new_x, new_y;
 
-	init(&g);
+	init(g);
 
 	//create_menu();
 	//get our maximun window dimensions
 	getmaxyx(stdscr, parent_y, parent_x);
 
-	g.header = newwin(((parent_y / 4)), parent_x, 0, 0);
-	g.the_board = newwin(parent_y - (parent_y / 4) + 1, parent_x, (parent_y / 4) - 1, 0);
+	g->header = newwin(((parent_y / 4)), parent_x, 0, 0);
+	g->the_board = newwin(parent_y - (parent_y / 4) + 1, parent_x, (parent_y / 4) - 1, 0);
 
-	wclear(g.the_board);
-	draw_borders(g.header);
-	draw_borders(g.the_board);
+	wclear(g->the_board);
+	draw_borders(g->header);
+	draw_borders(g->the_board);
 
-	keypad(g.the_board,TRUE);
+	keypad(g->the_board,TRUE);
 	dim = 19; 
 
-	draw_header(&g);
-	draw_screen(dim, &g);
+	draw_header(g);
+	draw_screen(dim, g);
 	while (1)
 	{
 		getmaxyx(stdscr, new_y, new_x);
@@ -309,29 +309,29 @@ int main()
 		{
 			parent_x = new_x;
 			parent_y = new_y;
-			wresize(g.header, ((new_y / 4)), new_x);
-			mvwin(g.header, 0, 0);
-			wresize(g.the_board, new_y - (new_y / 4) + 1, new_x);
-			mvwin(g.the_board, (new_y / 4) - 1, 0);
+			wresize(g->header, ((new_y / 4)), new_x);
+			mvwin(g->header, 0, 0);
+			wresize(g->the_board, new_y - (new_y / 4) + 1, new_x);
+			mvwin(g->the_board, (new_y / 4) - 1, 0);
 			wclear(stdscr);
-			wclear(g.the_board);
-			wclear(g.header);
-			draw_borders(g.the_board);
-			draw_borders(g.header);
-			draw_header(&g);
-			draw_screen(dim, &g);
-			redraw_stuff(&g);
+			wclear(g->the_board);
+			wclear(g->header);
+			draw_borders(g->the_board);
+			draw_borders(g->header);
+			draw_header(g);
+			draw_screen(dim, g);
+			redraw_stuff(g);
 		}
-		if((rtn=keyhook(dim,player, &g))==-1)
+		if((rtn=keyhook(dim,player, g))==-1)
 			break;
-		if (g.board->check_capture(player))
+		if (g->board->check_capture(player))
 		{
-			wclear(g.the_board);
-			draw_screen(dim, &g);
-			redraw_stuff(&g);
+			wclear(g->the_board);
+			draw_screen(dim, g);
+			redraw_stuff(g);
 		}
 		if(rtn == 1) {
-			if (g.board->check_win(player) || g.board->return_cap(player) == 5)
+			if (g->board->check_win(player) || g->board->return_cap(player) == 5)
 				break ;
 			player=!player;
 		}
@@ -341,10 +341,170 @@ int main()
 			printw("Invalid Move");
 		}
 	}
-	delwin(g.the_board);
-	delwin(g.header);
+	delwin(g->the_board);
+	delwin(g->header);
 	endwin();
 
 	printf("HAHAHAHAHA SOMEONE WON");
 	return (0);
+}
+
+int main()
+{
+	t_global g;
+
+	int		win_x; //Max Win X
+	int		win_y; //Max Win Y
+	int		option = 1; //Current Selected Option
+	int		c_x; //Center X of screen
+	int		c_y; //Center Y of screen
+	int		titleboxlen; //Strlen of titlebox
+	titleboxlen = strlen("=========================================================================="); //Get Title Box Length To Center It
+
+
+	initscr();
+	cbreak();
+	noecho();
+	curs_set(FALSE);
+	start_color();
+	init_pair(1, COLOR_BLACK, COLOR_WHITE);
+	
+	getmaxyx(stdscr, win_y, win_x); 
+	
+	WINDOW*win_menu = newwin(win_y, win_x, 0, 0);
+
+	keypad(win_menu, true);
+
+	while (1)
+	{
+		wclear(win_menu);
+		getmaxyx(win_menu, win_y, win_x);
+		c_x = win_x / 2; //Find Middle of X
+		c_y = win_y / 2; //Find Middle of Y
+		
+		//Render Fancy Boxes ETC
+		//The Text centering takes half the screen, then further subtracts half the strlen to center it perfectly. Just for you mister OCD
+		mvwprintw(win_menu, c_y - 10, c_x - (titleboxlen / 2), "==========================================================================");
+		mvwprintw(win_menu, c_y - 9, c_x - (titleboxlen / 2), "||                                                                      ||");
+		mvwprintw(win_menu, c_y - 8, c_x - (titleboxlen / 2), "||                                GOMOKU                                ||");
+		mvwprintw(win_menu, c_y - 7, c_x - (titleboxlen / 2), "||                                                                      ||");
+		mvwprintw(win_menu, c_y - 6, c_x - (titleboxlen / 2), "==========================================================================");
+		mvwprintw(win_menu, c_y - 5, c_x - (titleboxlen / 2), "||                                                                      ||");
+		mvwprintw(win_menu, c_y - 4, c_x - (titleboxlen / 2), "||                                                                      ||");
+		mvwprintw(win_menu, c_y - 3, c_x - (titleboxlen / 2), "||                                                                      ||");
+		mvwprintw(win_menu, c_y - 2, c_x - (titleboxlen / 2), "||                                                                      ||");
+		mvwprintw(win_menu, c_y - 1, c_x - (titleboxlen / 2), "||                                                                      ||");
+		mvwprintw(win_menu, c_y, c_x - (titleboxlen / 2), "||                                                                      ||");
+		mvwprintw(win_menu, c_y + 1, c_x - (titleboxlen / 2), "||                                                                      ||");
+		mvwprintw(win_menu, c_y + 2, c_x - (titleboxlen / 2), "||                                                                      ||");
+		mvwprintw(win_menu, c_y + 3, c_x - (titleboxlen / 2), "||                                                                      ||");
+		mvwprintw(win_menu, c_y + 4, c_x - (titleboxlen / 2), "||                                                                      ||");
+		mvwprintw(win_menu, c_y + 5, c_x - (titleboxlen / 2), "||                                                                      ||");
+		mvwprintw(win_menu, c_y + 6, c_x - (titleboxlen / 2), "||                                                                      ||");
+		mvwprintw(win_menu, c_y + 7, c_x - (titleboxlen / 2), "||                                                                      ||");
+		mvwprintw(win_menu, c_y + 8, c_x - (titleboxlen / 2), "||                                                                      ||");
+		mvwprintw(win_menu, c_y + 9, c_x - (titleboxlen / 2), "||                                                                      ||");
+		mvwprintw(win_menu, c_y + 10, c_x - (titleboxlen / 2), "||                                                                      ||");
+		mvwprintw(win_menu, c_y + 11, c_x - (titleboxlen / 2), "||                                                                      ||");
+		mvwprintw(win_menu, c_y + 12, c_x - (titleboxlen / 2), "==========================================================================");
+
+		//Render Out Buttons, Inverse Video Of Selected
+		if (option == 1)
+		{
+			wattron(win_menu, COLOR_PAIR(1));
+			mvwprintw(win_menu, c_y - 1, c_x - (strlen("Single Player") / 2), "Single Player");
+			wattroff(win_menu, COLOR_PAIR(1));
+		}
+		else
+			mvwprintw(win_menu, c_y - 1, c_x - (strlen("Single Player") / 2), "Single Player");
+
+		if (option == 2)
+		{
+			wattron(win_menu, COLOR_PAIR(1));
+			mvwprintw(win_menu, c_y + 1, c_x - (strlen("MultiPlayer") / 2), "MultiPlayer");
+			wattroff(win_menu, COLOR_PAIR(1));
+		}
+		else
+			mvwprintw(win_menu, c_y + 1, c_x - (strlen("MultiPlayer") / 2), "MultiPlayer");
+
+		if (option == 3)
+		{
+			wattron(win_menu, COLOR_PAIR(1));
+			mvwprintw(win_menu, c_y + 3, c_x - (strlen("Help") / 2), "Help");
+			wattroff(win_menu, COLOR_PAIR(1));
+		}
+		else
+			mvwprintw(win_menu, c_y + 3, c_x - (strlen("Help") / 2), "Help");
+
+		if (option == 4)
+		{
+			wattron(win_menu, COLOR_PAIR(1));
+			mvwprintw(win_menu, c_y + 5, c_x - (strlen("Credits") / 2), "Credits");
+			wattroff(win_menu, COLOR_PAIR(1));
+		}
+		else
+			mvwprintw(win_menu, c_y + 5, c_x - (strlen("Credits") / 2), "Credits");
+
+		if (option == 5)
+		{
+			wattron(win_menu, COLOR_PAIR(1));
+			mvwprintw(win_menu, c_y + 7, c_x - (strlen("Quit") / 2), "Quit");
+			wattroff(win_menu, COLOR_PAIR(1));
+		}
+		else
+			mvwprintw(win_menu, c_y + 7, c_x - (strlen("Quit") / 2), "Quit");
+
+		//Update Screen
+		wrefresh(win_menu);
+
+		//Key Hooks
+		switch(wgetch(win_menu))
+		{
+			case KEY_UP:
+				if (option == 1)
+					option = 5;
+				else
+					option -= 1;
+				break;
+			case KEY_DOWN:
+				if (option == 5)
+					option = 1;
+				else
+					option += 1;
+				break;
+			case 10: //10 Being Enter Key
+				if (option == 1)
+				{
+					//Do One Player Stuff
+					curs_set(TRUE);
+					pvp(&g);
+					curs_set(FALSE);
+				}
+				
+				if (option == 2)
+				{
+					//Do Two Player Stuff
+				}
+
+				if (option == 3)
+				{
+					//Help Stuff
+				}
+
+				if (option == 4)
+				{
+					//Credits Stuff
+				}
+
+				if (option == 5)
+				{
+					//Quit The Game
+					endwin();
+					curs_set(TRUE);
+					system("clear");
+					return (0);
+				}
+				break;
+		}
+	}
 }
