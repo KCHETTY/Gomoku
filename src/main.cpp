@@ -317,6 +317,32 @@ int pvp(t_global *g)
 	return (0);
 }
 
+void	credits_page()
+{
+		int x, y;
+		getmaxyx(stdscr, y, x);
+
+		WINDOW *win_credits = newwin(y, x, 0, 0);
+
+		keypad(win_credits, true);
+
+		while (1)
+		{
+			draw_borders(win_credits);
+			wrefresh(win_credits);
+			switch(wgetch(win_credits))
+    	{
+      	case 'q':
+				{
+					delwin(win_credits);
+					endwin();
+					return ;
+				}
+				break ;
+			}
+		}
+}
+
 int main()
 {
 	t_global g;
@@ -483,6 +509,7 @@ int main()
 				if (option == 4)
 				{
 					//Credits Stuff
+					credits_page();
 				}
 
 				if (option == 5)
