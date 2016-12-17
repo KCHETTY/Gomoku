@@ -195,35 +195,6 @@ void draw_borders(WINDOW *screen)
 	wrefresh(screen); 
 }
 
-void	create_menu()
-{
-	int max_x, max_y;
-
-	getmaxyx(stdscr, max_y, max_x);
-	WINDOW *menu = newwin(max_y, max_x, 0, 0);
-
-	start_color();
-	draw_borders(menu);
-	mvwprintw(menu, 2, ((max_x - 80) / 2) + 2,  "    GGGGGGGGGGGGG                                                          kkkkkkkk\n"
-			" GGG::::::::::::G                                                          k::::::k\n"                             
-		   "GG:::::::::::::::G                                                          k::::::k\n"
-		  "G:::::GGGGGGGG::::G                                                          k::::::k\n"                            
-	     "G:::::G      GGGGGG   ooooooooooo      mmmmmmm    mmmmmmm      ooooooooooo   k:::::k    kkkkkkkuuuuuu    uuuuuu\n"  
-		 "G:::::G               oo:::::::::::oo  mm:::::::m  m:::::::mm  oo:::::::::::oo  k:::::k   k:::::k u::::u    u::::u\n"  
-	     "G:::::G              o:::::::::::::::om::::::::::mm::::::::::mo:::::::::::::::o k:::::k  k:::::k  u::::u    u::::u\n"
-		 "G:::::G    GGGGGGGGGGo:::::ooooo:::::om::::::::::::::::::::::mo:::::ooooo:::::o k:::::k k:::::k   u::::u    u::::u\n"
-	   	 "G:::::G    G::::::::Go::::o     o::::om:::::mmm::::::mmm:::::mo::::o     o::::o k::::::k:::::k    u::::u    u::::u\n"
-		 "G:::::G    GGGGG::::Go::::o     o::::om::::m   m::::m   m::::mo::::o     o::::o k:::::::::::k     u::::u    u::::u\n"
-		 "G:::::G        G::::Go::::o     o::::om::::m   m::::m   m::::mo::::o     o::::o k:::::::::::k     u::::u    u::::u\n"  
-		 " G:::::G       G::::Go::::o     o::::om::::m   m::::m   m::::mo::::o     o::::o k::::::k:::::k    u:::::uuuu:::::u\n"  
-		   "G:::::GGGGGGGG::::Go:::::ooooo:::::om::::m   m::::m   m::::mo:::::ooooo:::::ok::::::k k:::::k   u:::::::::::::::uu\n"
-			"GG:::::::::::::::Go:::::::::::::::om::::m   m::::m   m::::mo:::::::::::::::ok::::::k  k:::::k   u:::::::::::::::u\n"
-			 "GGG::::::GGG:::G oo:::::::::::oo m::::m   m::::m   m::::m oo:::::::::::oo k::::::k   k:::::k   uu::::::::uu:::u\n"
-			   "GGGGGG   GGGG   ooooooooooo   mmmmmm   mmmmmm   mmmmmm   ooooooooooo   kkkkkkkk    kkkkkkk    uuuuuuuu  uuuu\n");
-	while (1)	
-		wrefresh(menu);
-}
-
 void	init(t_global *g)
 {
 	g->x = 0;
@@ -284,9 +255,6 @@ int pvp(t_global *g)
 	int dim,rtn,player = 0;
 	int parent_x = 0, parent_y = 0, new_x, new_y;
 
-	init(g);
-
-	//create_menu();
 	//get our maximun window dimensions
 	getmaxyx(stdscr, parent_y, parent_x);
 
@@ -362,9 +330,7 @@ int main()
 	titleboxlen = strlen("=========================================================================="); //Get Title Box Length To Center It
 
 
-	initscr();
-	cbreak();
-	noecho();
+	init(&g);
 	curs_set(FALSE);
 	start_color();
 	init_pair(1, COLOR_BLACK, COLOR_WHITE);
@@ -384,10 +350,33 @@ int main()
 		
 		//Render Fancy Boxes ETC
 		//The Text centering takes half the screen, then further subtracts half the strlen to center it perfectly. Just for you mister OCD
-		mvwprintw(win_menu, c_y - 10, c_x - (titleboxlen / 2), "==========================================================================");
-		mvwprintw(win_menu, c_y - 9, c_x - (titleboxlen / 2), "||                                                                      ||");
-		mvwprintw(win_menu, c_y - 8, c_x - (titleboxlen / 2), "||                                GOMOKU                                ||");
-		mvwprintw(win_menu, c_y - 7, c_x - (titleboxlen / 2), "||                                                                      ||");
+		
+		if (win_y > 47 && win_x > 117)
+		{
+			mvwprintw(win_menu, 1, (c_x - (116 / 2)),  "      GGGGGGGGGGGGG                                                            kkkkkkkk                             \n");
+    	mvwprintw(win_menu, 2, (c_x - (116 / 2)),  "    GGG::::::::::::G                                                           k::::::k                             \n");  
+    	mvwprintw(win_menu, 3, (c_x - (116 / 2)),  "   GG:::::::::::::::G                                                          k::::::k                             \n");
+    	mvwprintw(win_menu, 4, (c_x - (116 / 2)),  "  G:::::GGGGGGGG::::G                                                          k::::::k                             \n");
+    	mvwprintw(win_menu, 5, (c_x - (116 / 2)),  " G:::::G       GGGGGG   ooooooooooo      mmmmmmm    mmmmmmm      ooooooooooo   k:::::k    kkkkkkkuuuuuu      uuuuuu \n");
+    	mvwprintw(win_menu, 6, (c_x - (116 / 2)),  "G:::::G               oo:::::::::::oo  mm:::::::m  m:::::::mm  oo:::::::::::oo k:::::k   k:::::k u::::u      u::::u \n"); 
+    	mvwprintw(win_menu, 7, (c_x - (116 / 2)),  "G:::::G              o:::::::::::::::om::::::::::mm::::::::::mo:::::::::::::::ok:::::k  k:::::k  u::::u      u::::u \n");
+    	mvwprintw(win_menu, 8, (c_x - (116 / 2)),  "G:::::G    GGGGGGGGGGo:::::ooooo:::::om::::::::::::::::::::::mo:::::ooooo:::::ok:::::k k:::::k   u::::u      u::::u \n");
+    	mvwprintw(win_menu, 9, (c_x - (116 / 2)),  "G:::::G    G::::::::Go::::o     o::::om:::::mmm::::::mmm:::::mo::::o     o::::ok::::::k:::::k    u::::u      u::::u \n");
+    	mvwprintw(win_menu, 10, (c_x - (116 / 2)), "G:::::G    GGGGG::::Go::::o     o::::om::::m   m::::m   m::::mo::::o     o::::ok:::::::::::k     u::::u      u::::u \n");
+    	mvwprintw(win_menu, 11, (c_x - (116 / 2)), "G:::::G        G::::Go::::o     o::::om::::m   m::::m   m::::mo::::o     o::::ok:::::::::::k     u::::u      u::::u \n");
+    	mvwprintw(win_menu, 12, (c_x - (116 / 2)), " G:::::G       G::::Go::::o     o::::om::::m   m::::m   m::::mo::::o     o::::ok::::::k:::::k    u::::::uuuu::::::u \n"); 
+    	mvwprintw(win_menu, 13, (c_x - (116 / 2)), "  G:::::GGGGGGGG::::Go:::::ooooo:::::om::::m   m::::m   m::::mo:::::ooooo:::::ok::::::k k:::::k  u:::::::::::::::uu \n");
+    	mvwprintw(win_menu, 14, (c_x - (116 / 2)), "   GG:::::::::::::::Go:::::::::::::::om::::m   m::::m   m::::mo:::::::::::::::ok::::::k  k:::::k  u:::::::::::::::u \n");
+    	mvwprintw(win_menu, 15, (c_x - (116 / 2)), "    GGG::::::GGG:::G oo:::::::::::oo  m::::m   m::::m   m::::m oo:::::::::::oo k::::::k   k:::::k  uu::::::::uu:::u \n");
+    	mvwprintw(win_menu, 16, (c_x - (116 / 2)), "       GGGGGG   GGGG   ooooooooooo    mmmmmm   mmmmmm   mmmmmm   ooooooooooo   kkkkkkkk    kkkkkkk  uuuuuuuu  uuuu  \n");
+		}
+		else
+		{
+				mvwprintw(win_menu, c_y - 10, c_x - (titleboxlen / 2), "==========================================================================");
+    		mvwprintw(win_menu, c_y - 9, c_x - (titleboxlen / 2), "||                                                                      ||");
+    		mvwprintw(win_menu, c_y - 8, c_x - (titleboxlen / 2), "||                                GOMOKU                                ||");
+    		mvwprintw(win_menu, c_y - 7, c_x - (titleboxlen / 2), "||                                                                      ||");
+		}
 		mvwprintw(win_menu, c_y - 6, c_x - (titleboxlen / 2), "==========================================================================");
 		mvwprintw(win_menu, c_y - 5, c_x - (titleboxlen / 2), "||                                                                      ||");
 		mvwprintw(win_menu, c_y - 4, c_x - (titleboxlen / 2), "||                                                                      ||");
