@@ -22,7 +22,7 @@ void draw_screen(int dim, t_global *g)
 
 	getmaxyx(g->the_board, win_y, win_x);
 	tmp = ((win_y / 2) - (38 / 2));
-	mvwprintw(g->the_board, 2, 2,  "teh x: %d AND WIN_Y: %d\n ", win_x  ,win_y);
+	//mvwprintw(g->the_board, 2, 2,  "teh x: %d AND WIN_Y: %d\n ", win_x  ,win_y);
 	for(y = 0; y < dim; y++)
 	{
 		for(x = 0; x < dim; x++) 
@@ -30,7 +30,7 @@ void draw_screen(int dim, t_global *g)
 			if (x == 0)
 			{
 				//mvwprintw(g->the_board, tmp - 1, ((win_x / 2) - (79 / 2) + 1), "%d", y + 1);
-				mvwprintw(g->the_board, tmp, ((win_x / 2) - (79 / 2)), " ---");
+				mvwprintw(g->the_board, tmp, ((win_x / 2) - (77 / 2)), " ---");
 			}
 			else
 				wprintw(g->the_board, " ---");
@@ -200,6 +200,7 @@ void	init(t_global *g)
 	g->x = 0;
 	g->y = 0;
 	g->board = new board_class();
+	g->board->init();
 
 	initscr();
 	noecho();
@@ -270,6 +271,7 @@ int pvp(t_global *g)
 
 	draw_header(g);
 	draw_screen(dim, g);
+	redraw_stuff(g);
 	while (1)
 	{
 		getmaxyx(stdscr, new_y, new_x);
@@ -300,7 +302,10 @@ int pvp(t_global *g)
 		}
 		if(rtn == 1) {
 			if (g->board->check_win(player) || g->board->return_cap(player) == 5)
+			{
+				g->board->init();
 				break ;
+			}
 			player=!player;
 		}
 		if (rtn == -3)
