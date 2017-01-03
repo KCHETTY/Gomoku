@@ -249,6 +249,27 @@ void	draw_header(t_global *g)
 	wrefresh(g->header);
 }
 
+void	draw_player_stats(t_global *g, int player)
+{
+	int board_x;
+	int board_y;
+	
+	getmaxyx(g->the_board, board_y, board_x);
+	start_color();
+	init_pair(10, COLOR_GREEN, COLOR_BLACK);
+	if (!player)
+		wattron(g->the_board, COLOR_PAIR(10));
+	mvwprintw(g->the_board, board_y - 12, board_x - 25, "Player X\n");
+	mvwprintw(g->the_board, board_y - 10, board_x - 25, "Captures %d\n", g->board->return_cap(0));
+	wattroff(g->the_board, COLOR_PAIR(10));
+	if (player)
+		wattron(g->the_board, COLOR_PAIR(10));	
+	mvwprintw(g->the_board, board_y - 13, board_x - 25, "Player O\n");	
+	mvwprintw(g->the_board, board_y - 11, board_x - 25, "Captures %d\n", g->board->return_cap(1));
+	wattroff(g->the_board, COLOR_PAIR(10));
+	wrefresh(g->the_board);
+}
+
 int pvp(t_global *g) 
 {
 	//t_global g;
@@ -272,6 +293,7 @@ int pvp(t_global *g)
 	draw_header(g);
 	draw_screen(dim, g);
 	redraw_stuff(g);
+	draw_player_stats(g, player);
 	while (1)
 	{
 		getmaxyx(stdscr, new_y, new_x);
@@ -299,6 +321,7 @@ int pvp(t_global *g)
 			wclear(g->the_board);
 			draw_screen(dim, g);
 			redraw_stuff(g);
+			draw_player_stats(g, player);
 		}
 		if(rtn == 1) {
 			if (g->board->check_win(player) || g->board->return_cap(player) == 5)
@@ -313,10 +336,12 @@ int pvp(t_global *g)
 			move(dim * 2 + 4, 0);
 			printw("Invalid Move");
 		}
+		draw_player_stats(g, player);
 	}
 	delwin(g->the_board);
 	delwin(g->header);
 	endwin();
+
 
 	printf("HAHAHAHAHA SOMEONE WON");
 	return (0);
@@ -346,6 +371,27 @@ void	credits_page()
 				break ;
 			}
 		}
+}
+
+void	help()
+{
+	int win_y = 0; 
+	int win_x = 0;
+
+	getmaxyx(stdscr, win_y, win_x);
+
+	WINDOW *help_win = newwin(win_y, win_x, 0, 0);
+	draw_borders(help_win);
+	switch (wgetch(help_win))
+	{
+		case 'q':
+		{
+				delwin(help_win);
+				endwin();
+				return ;
+		}
+		break ;
+	}		
 }
 
 int main()
@@ -509,6 +555,7 @@ int main()
 				if (option == 3)
 				{
 					//Help Stuff
+					help();
 				}
 
 				if (option == 4)
