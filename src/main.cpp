@@ -6,7 +6,7 @@
 /*   By: kchetty <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/28 08:34:50 by kchetty           #+#    #+#             */
-/*   Updated: 2016/12/10 11:24:39 by kchetty          ###   ########.fr       */
+/*   Updated: 2017/01/04 13:20:37 by kchetty          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -255,17 +255,19 @@ void	draw_player_stats(t_global *g, int player)
 	int board_y;
 	
 	getmaxyx(g->the_board, board_y, board_x);
+	g->time = clock() - g->time;
 	start_color();
 	init_pair(10, COLOR_GREEN, COLOR_BLACK);
 	if (!player)
 		wattron(g->the_board, COLOR_PAIR(10));
-	mvwprintw(g->the_board, board_y - 12, board_x - 25, "Player X\n");
+	mvwprintw(g->the_board, board_y - 11, board_x - 25, "Player X\n");
 	mvwprintw(g->the_board, board_y - 10, board_x - 25, "Captures %d\n", g->board->return_cap(0));
+	mvwprintw(g->the_board, board_y - 9, board_x - 25, "time taken: %f\n", (((float)g->time)/CLOCKS_PER_SEC));
 	wattroff(g->the_board, COLOR_PAIR(10));
 	if (player)
 		wattron(g->the_board, COLOR_PAIR(10));	
 	mvwprintw(g->the_board, board_y - 13, board_x - 25, "Player O\n");	
-	mvwprintw(g->the_board, board_y - 11, board_x - 25, "Captures %d\n", g->board->return_cap(1));
+	mvwprintw(g->the_board, board_y - 12, board_x - 25, "Captures %d\n", g->board->return_cap(1));
 	wattroff(g->the_board, COLOR_PAIR(10));
 	wrefresh(g->the_board);
 }
@@ -294,6 +296,7 @@ int pvp(t_global *g)
 	draw_screen(dim, g);
 	redraw_stuff(g);
 	draw_player_stats(g, player);
+	g->time = clock();
 	while (1)
 	{
 		getmaxyx(stdscr, new_y, new_x);
@@ -321,22 +324,23 @@ int pvp(t_global *g)
 			wclear(g->the_board);
 			draw_screen(dim, g);
 			redraw_stuff(g);
-			draw_player_stats(g, player);
 		}
-		if(rtn == 1) {
+		if(rtn == 1) 
+		{
+			draw_player_stats(g, player);
 			if (g->board->check_win(player) || g->board->return_cap(player) == 5)
 			{
 				g->board->init();
 				break ;
 			}
 			player=!player;
+			g->time = clock();
 		}
 		if (rtn == -3)
 		{
 			move(dim * 2 + 4, 0);
 			printw("Invalid Move");
 		}
-		draw_player_stats(g, player);
 	}
 	delwin(g->the_board);
 	delwin(g->header);
