@@ -15,7 +15,7 @@ int main()
 	{
 		for (x = 0; x < 19; x++)
 		{
-			array[y][x] = 0;
+			array[y][x] = -1;
 		}
 	}
 
@@ -29,10 +29,10 @@ int main()
 	}
 
 	cout << endl << endl << endl;
-	array[11][11] = 1;
-	array[10][11] = 2;
-	array[7][9] = 1;
-	array[11][13] = 2;
+	array[0][0] = 1;
+	//array[10][11] = 2;
+	//array[7][9] = 1;
+	//array[11][13] = 2;
 
 	for (y = 0; y < 19; y++)
 	{   
@@ -46,69 +46,84 @@ int main()
 	vector<int> temp;
 	temp.push_back(0);
 	temp.push_back(0);
+	int tmp_y;
+	int tmp_x;
 	for (y = 0; y < 19; y++)
 	{
 		for (x = 0; x < 19; x++)
 		{ 
-			if (array[y][x + 1] == -1 && array[y][x] == 1 || array[y][x] == 2)
+			tmp_x = x;
+			tmp_y = y;
+			if (array[y][x + 1] == -1 && (array[y][x] == 1 || array[y][x] == 2))
 			{
-					temp[0] = x + 1;
+					temp[0] = tmp_x += 1;
 					temp[1] = y;
+					tmp_x -= 1;
 					co_ords.push_back(temp);
 			}
-			if (array[y + 1][x] == -1 && array[y][x] == 1 || array[y][x] == 2)
+			if (array[y + 1][x] == -1 && (array[y][x] == 1 || array[y][x] == 2))
 			{
 					temp[0] = x;                                                 
-			    temp[1] = y + 1;  
+			    temp[1] = tmp_y += 1;
+					tmp_y -= 1;
 					co_ords.push_back(temp);
 			}
-			if (array[y - 1][x] == -1 && array[y][x] == 1 || array[y][x] == 2)
+			if (array[y - 1][x] == -1 && (array[y][x] == 1 || array[y][x] == 2))
 			{
 					temp[0] = x;                                                 
-			    temp[1] = y - 1;     
+			    temp[1] = tmp_y -= 1;
+					tmp_y += 1;
 					co_ords.push_back(temp);
 			}
-			if (array[y][x - 1] == -1 && array[y][x] == 1 || array[y][x] == 2)
+			if (array[y][x - 1] == -1 && (array[y][x] == 1 || array[y][x] == 2))
 			{
-					temp[0] = x - 1;                                                 
-			    temp[1] = y;     
+					temp[0] = tmp_x -= 1;                                                 
+			    temp[1] = y;    
+					tmp_x += 1;
 					co_ords.push_back(temp);
 			}
-			if (array[y + 1][x + 1] == -1 && array[y][x] == 1 || array[y][x] == 2)
+			if (array[y + 1][x + 1] == -1 && (array[y][x] == 1 || array[y][x] == 2))
 			{
-					temp[0] = x + 1;                                                 
-			    temp[1] = y + 1;     
+					temp[0] = tmp_x += 1;                                                 
+			    temp[1] = tmp_y += 1;
+					tmp_y -= 1;
+					tmp_x -= 1;
 					co_ords.push_back(temp);
 			}
-			if (array[y - 1][x + 1] == -1 && array[y][x] == 1 || array[y][x] == 2)
+			if (array[y - 1][x + 1] == -1 && (array[y][x] == 1 || array[y][x] == 2))
 			{
-					temp[0] = x + 1;                                                 
-			    temp[1] = y - 1;     
+					temp[0] = tmp_x += 1;                                                 
+			    temp[1] = tmp_y -= 1;
+					tmp_x -= 1;
+					tmp_y += 1;
 					co_ords.push_back(temp);
 			}
-			if (array[y - 1][x - 1] == -1 && array[y][x] == 1 || array[y][x] == 2)
+			if (array[y - 1][x - 1] == -1 && (array[y][x] == 1 || array[y][x] == 2))
 			{
-					temp[0] = x - 1;                                                 
-			    temp[1] = y - 1;     
+					temp[0] = tmp_x -= 1;                                                 
+			    temp[1] = tmp_y -= 1;
+					tmp_x += 1;
+					tmp_y += 1;
 					co_ords.push_back(temp);
 			}
-			if (array[y + 1][x - 1] == -1 && array[y][x] == 1 || array[y][x] == 2)
+			if (array[y + 1][x - 1] == -1 && (array[y][x] == 1 || array[y][x] == 2))
 			{
-					temp[0] = x - 1;                                                 
-			   	temp[1] = y + 1;     
+					temp[0] = tmp_x -= 1;                                                 
+			   	temp[1] = tmp_y += 1;
+					tmp_y -= 1;
+					tmp_x += 1;
 					co_ords.push_back(temp);
 			}
 		}
-
+	}
 		cout << endl;
 		for (int i = 0; i < co_ords.size(); i++)
 		{
-				cout << " " << co_ords[i][0] << endl;	
+				cout << " " << co_ords[i][0] << endl;
 				cout << " " << co_ords[i][1] << endl;
 				cout << endl << endl;
 		}
 
-	}
 
 	return (0);
 }
