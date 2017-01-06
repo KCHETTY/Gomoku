@@ -6,7 +6,7 @@
 /*   By: kchetty <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/28 08:34:50 by kchetty           #+#    #+#             */
-/*   Updated: 2017/01/05 15:04:52 by kchetty          ###   ########.fr       */
+/*   Updated: 2017/01/06 09:09:20 by kchetty          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,8 +41,8 @@ void draw_screen(int dim, t_global *g)
 		{
 			if (x == 0)
 			{
-					//mvwprintw(g->the_board, tmp, ((win_x / 2) - (77 / 2)), "|   ");
-					mvwprintw(g->the_board, tmp, ((win_x / 2) - (77 / 2)), "|   ");
+				//mvwprintw(g->the_board, tmp, ((win_x / 2) - (77 / 2)), "|   ");
+				mvwprintw(g->the_board, tmp, ((win_x / 2) - (77 / 2)), "|   ");
 			}
 			else
 				wprintw(g->the_board, "|   ");
@@ -94,7 +94,13 @@ void	redraw_stuff(t_global *g)
 		}
 	}
 	wrefresh(g->the_board);
-}	
+}
+
+int  ai(t_global *g)
+{
+
+
+}
 
 int  keyhook(int dim, int player, t_global *g)
 {
@@ -215,7 +221,7 @@ void	draw_header(t_global *g)
 	init_pair(9, COLOR_GREEN, COLOR_BLACK);
 	init_pair(2, COLOR_CYAN, COLOR_BLACK);
 	init_pair(3, COLOR_RED, COLOR_BLACK);
- 	init_pair(4, COLOR_MAGENTA, COLOR_BLACK);
+	init_pair(4, COLOR_MAGENTA, COLOR_BLACK);
 	init_pair(5, COLOR_YELLOW, COLOR_BLACK);
 	init_pair(8, COLOR_BLUE, COLOR_BLACK);
 	getmaxyx(g->header, win_y, win_x);
@@ -244,7 +250,7 @@ void	draw_header(t_global *g)
 
 	wattron(g->header, COLOR_PAIR(8));
 	mvwprintw(g->header,(win_y / 2) + 3, ((win_x / 2) - (52 / 2)),  "      # ##    ########  ##               ##        \n");
-	 wattroff(g->header, COLOR_PAIR(8));
+	wattroff(g->header, COLOR_PAIR(8));
 
 	wrefresh(g->header);
 }
@@ -253,7 +259,7 @@ void	draw_player_stats(t_global *g, int player)
 {
 	int board_x;
 	int board_y;
-	
+
 	getmaxyx(g->the_board, board_y, board_x);
 	g->time = clock() - g->time;
 	start_color();
@@ -271,6 +277,84 @@ void	draw_player_stats(t_global *g, int player)
 	wattroff(g->the_board, COLOR_PAIR(10));
 	wrefresh(g->the_board);
 }
+
+
+int pvb(t_global *g)
+{
+	int dim,rtn,player = 0;
+	int parent_x = 0, parent_y = 0, new_x, new_y;
+	getmaxyx(stdscr, parent_y, parent_x);
+
+	g->header = newwin(((parent_y / 4)), parent_x, 0, 0);
+	g->the_board = newwin(parent_y - (parent_y / 4) + 1, parent_x, (parent_y / 4) - 1, 0);
+
+	wclear(g->the_board);
+	draw_borders(g->header);
+	draw_borders(g->the_board);
+
+	keypad(g->the_board,TRUE);
+	dim = 19;
+
+	draw_header(g);
+	draw_screen(dim, g);
+	redraw_stuff(g);
+	draw_player_stats(g, player);
+	g->time = clock();
+
+	while (1)
+	{
+		getmaxyx(stdscr, new_y, new_x);
+		if (new_y != parent_y || new_x != parent_x)
+		{
+			parent_x = new_x;
+			parent_y = new_y;
+			wresize(g->header, ((new_y / 4)), new_x);
+			mvwin(g->header, 0, 0);
+			wresize(g->the_board, new_y - (new_y / 4) + 1, new_x);
+			mvwin(g->the_board, (new_y / 4) - 1, 0);
+			wclear(stdscr);
+			wclear(g->the_board);
+			wclear(g->header);
+			draw_borders(g->the_board);
+			draw_borders(g->header);
+			draw_header(g);
+			draw_screen(dim, g);
+			redraw_stuff(g);
+		}
+		if((rtn=keyhook(dim,player, g))==-1)
+			break;
+		if (g->board->check_capture(player))
+		{
+			wclear(g->the_board);
+			draw_screen(dim, g);
+			redraw_stuff(g);
+		}
+		if(rtn == 1)
+		{
+			draw_player_stats(g, player);
+			if (g->board->check_win(player) || g->board->return_cap(player) == 5)
+			{
+				g->board->init();
+				break ;
+			}
+			player=!player;
+			g->time = clock();
+		}
+		if (rtn == -3)
+		{
+			move(dim * 2 + 4, 0);
+			printw("Invalid Move");
+		}
+	}
+	delwin(g->the_board);
+	delwin(g->header);
+	endwin();
+
+
+	printf("HAHAHAHAHA SOMEONE WON");
+	return (0);
+}
+
 
 int pvp(t_global *g) 
 {
@@ -353,28 +437,28 @@ int pvp(t_global *g)
 
 void	credits_page()
 {
-		int x, y;
-		getmaxyx(stdscr, y, x);
+	int x, y;
+	getmaxyx(stdscr, y, x);
 
-		WINDOW *win_credits = newwin(y, x, 0, 0);
+	WINDOW *win_credits = newwin(y, x, 0, 0);
 
-		keypad(win_credits, true);
+	keypad(win_credits, true);
 
-		while (1)
+	while (1)
+	{
+		draw_borders(win_credits);
+		wrefresh(win_credits);
+		switch(wgetch(win_credits))
 		{
-			draw_borders(win_credits);
-			wrefresh(win_credits);
-			switch(wgetch(win_credits))
-    	{
-      	case 'q':
+			case 'q':
 				{
 					delwin(win_credits);
 					endwin();
 					return ;
 				}
 				break ;
-			}
 		}
+	}
 }
 
 void	help()
@@ -389,12 +473,12 @@ void	help()
 	switch (wgetch(help_win))
 	{
 		case 'q':
-		{
+			{
 				delwin(help_win);
 				endwin();
 				return ;
-		}
-		break ;
+			}
+			break ;
 	}		
 }
 
@@ -415,9 +499,9 @@ int main()
 	curs_set(FALSE);
 	start_color();
 	init_pair(1, COLOR_BLACK, COLOR_WHITE);
-	
+
 	getmaxyx(stdscr, win_y, win_x); 
-	
+
 	WINDOW*win_menu = newwin(win_y, win_x, 0, 0);
 
 	keypad(win_menu, true);
@@ -428,35 +512,35 @@ int main()
 		getmaxyx(win_menu, win_y, win_x);
 		c_x = win_x / 2; //Find Middle of X
 		c_y = win_y / 2; //Find Middle of Y
-		
+
 		//Render Fancy Boxes ETC
 		//The Text centering takes half the screen, then further subtracts half the strlen to center it perfectly. Just for you mister OCD
-		
+
 		if (win_y > 47 && win_x > 117)
 		{
 			mvwprintw(win_menu, 1, (c_x - (116 / 2)),  "      GGGGGGGGGGGGG                                                            kkkkkkkk                             \n");
-    	mvwprintw(win_menu, 2, (c_x - (116 / 2)),  "    GGG::::::::::::G                                                           k::::::k                             \n");  
-    	mvwprintw(win_menu, 3, (c_x - (116 / 2)),  "   GG:::::::::::::::G                                                          k::::::k                             \n");
-    	mvwprintw(win_menu, 4, (c_x - (116 / 2)),  "  G:::::GGGGGGGG::::G                                                          k::::::k                             \n");
-    	mvwprintw(win_menu, 5, (c_x - (116 / 2)),  " G:::::G       GGGGGG   ooooooooooo      mmmmmmm    mmmmmmm      ooooooooooo   k:::::k    kkkkkkkuuuuuu      uuuuuu \n");
-    	mvwprintw(win_menu, 6, (c_x - (116 / 2)),  "G:::::G               oo:::::::::::oo  mm:::::::m  m:::::::mm  oo:::::::::::oo k:::::k   k:::::k u::::u      u::::u \n"); 
-    	mvwprintw(win_menu, 7, (c_x - (116 / 2)),  "G:::::G              o:::::::::::::::om::::::::::mm::::::::::mo:::::::::::::::ok:::::k  k:::::k  u::::u      u::::u \n");
-    	mvwprintw(win_menu, 8, (c_x - (116 / 2)),  "G:::::G    GGGGGGGGGGo:::::ooooo:::::om::::::::::::::::::::::mo:::::ooooo:::::ok:::::k k:::::k   u::::u      u::::u \n");
-    	mvwprintw(win_menu, 9, (c_x - (116 / 2)),  "G:::::G    G::::::::Go::::o     o::::om:::::mmm::::::mmm:::::mo::::o     o::::ok::::::k:::::k    u::::u      u::::u \n");
-    	mvwprintw(win_menu, 10, (c_x - (116 / 2)), "G:::::G    GGGGG::::Go::::o     o::::om::::m   m::::m   m::::mo::::o     o::::ok:::::::::::k     u::::u      u::::u \n");
-    	mvwprintw(win_menu, 11, (c_x - (116 / 2)), "G:::::G        G::::Go::::o     o::::om::::m   m::::m   m::::mo::::o     o::::ok:::::::::::k     u::::u      u::::u \n");
-    	mvwprintw(win_menu, 12, (c_x - (116 / 2)), " G:::::G       G::::Go::::o     o::::om::::m   m::::m   m::::mo::::o     o::::ok::::::k:::::k    u::::::uuuu::::::u \n"); 
-    	mvwprintw(win_menu, 13, (c_x - (116 / 2)), "  G:::::GGGGGGGG::::Go:::::ooooo:::::om::::m   m::::m   m::::mo:::::ooooo:::::ok::::::k k:::::k  u:::::::::::::::uu \n");
-    	mvwprintw(win_menu, 14, (c_x - (116 / 2)), "   GG:::::::::::::::Go:::::::::::::::om::::m   m::::m   m::::mo:::::::::::::::ok::::::k  k:::::k  u:::::::::::::::u \n");
-    	mvwprintw(win_menu, 15, (c_x - (116 / 2)), "    GGG::::::GGG:::G oo:::::::::::oo  m::::m   m::::m   m::::m oo:::::::::::oo k::::::k   k:::::k  uu::::::::uu:::u \n");
-    	mvwprintw(win_menu, 16, (c_x - (116 / 2)), "       GGGGGG   GGGG   ooooooooooo    mmmmmm   mmmmmm   mmmmmm   ooooooooooo   kkkkkkkk    kkkkkkk  uuuuuuuu  uuuu  \n");
+			mvwprintw(win_menu, 2, (c_x - (116 / 2)),  "    GGG::::::::::::G                                                           k::::::k                             \n");  
+			mvwprintw(win_menu, 3, (c_x - (116 / 2)),  "   GG:::::::::::::::G                                                          k::::::k                             \n");
+			mvwprintw(win_menu, 4, (c_x - (116 / 2)),  "  G:::::GGGGGGGG::::G                                                          k::::::k                             \n");
+			mvwprintw(win_menu, 5, (c_x - (116 / 2)),  " G:::::G       GGGGGG   ooooooooooo      mmmmmmm    mmmmmmm      ooooooooooo   k:::::k    kkkkkkkuuuuuu      uuuuuu \n");
+			mvwprintw(win_menu, 6, (c_x - (116 / 2)),  "G:::::G               oo:::::::::::oo  mm:::::::m  m:::::::mm  oo:::::::::::oo k:::::k   k:::::k u::::u      u::::u \n"); 
+			mvwprintw(win_menu, 7, (c_x - (116 / 2)),  "G:::::G              o:::::::::::::::om::::::::::mm::::::::::mo:::::::::::::::ok:::::k  k:::::k  u::::u      u::::u \n");
+			mvwprintw(win_menu, 8, (c_x - (116 / 2)),  "G:::::G    GGGGGGGGGGo:::::ooooo:::::om::::::::::::::::::::::mo:::::ooooo:::::ok:::::k k:::::k   u::::u      u::::u \n");
+			mvwprintw(win_menu, 9, (c_x - (116 / 2)),  "G:::::G    G::::::::Go::::o     o::::om:::::mmm::::::mmm:::::mo::::o     o::::ok::::::k:::::k    u::::u      u::::u \n");
+			mvwprintw(win_menu, 10, (c_x - (116 / 2)), "G:::::G    GGGGG::::Go::::o     o::::om::::m   m::::m   m::::mo::::o     o::::ok:::::::::::k     u::::u      u::::u \n");
+			mvwprintw(win_menu, 11, (c_x - (116 / 2)), "G:::::G        G::::Go::::o     o::::om::::m   m::::m   m::::mo::::o     o::::ok:::::::::::k     u::::u      u::::u \n");
+			mvwprintw(win_menu, 12, (c_x - (116 / 2)), " G:::::G       G::::Go::::o     o::::om::::m   m::::m   m::::mo::::o     o::::ok::::::k:::::k    u::::::uuuu::::::u \n"); 
+			mvwprintw(win_menu, 13, (c_x - (116 / 2)), "  G:::::GGGGGGGG::::Go:::::ooooo:::::om::::m   m::::m   m::::mo:::::ooooo:::::ok::::::k k:::::k  u:::::::::::::::uu \n");
+			mvwprintw(win_menu, 14, (c_x - (116 / 2)), "   GG:::::::::::::::Go:::::::::::::::om::::m   m::::m   m::::mo:::::::::::::::ok::::::k  k:::::k  u:::::::::::::::u \n");
+			mvwprintw(win_menu, 15, (c_x - (116 / 2)), "    GGG::::::GGG:::G oo:::::::::::oo  m::::m   m::::m   m::::m oo:::::::::::oo k::::::k   k:::::k  uu::::::::uu:::u \n");
+			mvwprintw(win_menu, 16, (c_x - (116 / 2)), "       GGGGGG   GGGG   ooooooooooo    mmmmmm   mmmmmm   mmmmmm   ooooooooooo   kkkkkkkk    kkkkkkk  uuuuuuuu  uuuu  \n");
 		}
 		else
 		{
-				mvwprintw(win_menu, c_y - 10, c_x - (titleboxlen / 2), "==========================================================================");
-    		mvwprintw(win_menu, c_y - 9, c_x - (titleboxlen / 2), "||                                                                      ||");
-    		mvwprintw(win_menu, c_y - 8, c_x - (titleboxlen / 2), "||                                GOMOKU                                ||");
-    		mvwprintw(win_menu, c_y - 7, c_x - (titleboxlen / 2), "||                                                                      ||");
+			mvwprintw(win_menu, c_y - 10, c_x - (titleboxlen / 2), "==========================================================================");
+			mvwprintw(win_menu, c_y - 9, c_x - (titleboxlen / 2), "||                                                                      ||");
+			mvwprintw(win_menu, c_y - 8, c_x - (titleboxlen / 2), "||                                GOMOKU                                ||");
+			mvwprintw(win_menu, c_y - 7, c_x - (titleboxlen / 2), "||                                                                      ||");
 		}
 		mvwprintw(win_menu, c_y - 6, c_x - (titleboxlen / 2), "==========================================================================");
 		mvwprintw(win_menu, c_y - 5, c_x - (titleboxlen / 2), "||                                                                      ||");
@@ -547,13 +631,16 @@ int main()
 				{
 					//Do One Player Stuff
 					curs_set(TRUE);
-					pvp(&g);
+					pvb(&g);
 					curs_set(FALSE);
 				}
-				
+
 				if (option == 2)
 				{
 					//Do Two Player Stuff
+					curs_set(TRUE);
+					pvp(&g);
+					curs_set(FALSE);
 				}
 
 				if (option == 3)
