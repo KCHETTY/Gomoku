@@ -6,7 +6,7 @@
 /*   By: kchetty <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/28 08:34:50 by kchetty           #+#    #+#             */
-/*   Updated: 2017/01/06 15:12:38 by kchetty          ###   ########.fr       */
+/*   Updated: 2017/01/06 16:15:03 by kchetty          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,14 +92,6 @@ vector < vector <int> >  delimeter(board_class *copy)
 		}
 	}
 	cout << endl;
-	for (unsigned int i = 0; i < co_ords.size(); i++)
-	{
-		cout << " " << co_ords[i][0] << endl;
-		cout << " " << co_ords[i][1] << endl;
-		cout << endl << endl;
-	}
-
-
 	return (co_ords);
 }
 
@@ -187,16 +179,31 @@ void	redraw_stuff(t_global *g)
 	wrefresh(g->the_board);
 }
 
-int  bot(t_global *g, board_class *copy)
+int  bot(board_class *copy, int player)
 {
+	if (copy->check_win(0))
+		return (10);
+	if (copy->check_win(1))
+		return (10);
+
 	vector < vector <int> > test;
 	test = delimeter(copy);
+	int val;
 
-	for (unsigned int j = 0; j < test.size(); j++)
+	/*for (unsigned int j = 0; j < test.size(); j++)
 	{
 		cout << test[j][0] << endl;
 		cout << test[j][1] << endl;
 		cout << endl;
+	}*/
+	for (unsigned int j = 0; j < test.size(); j++)
+	{
+		if (player == 0)
+			val = copy->set_x(test[j][0], test[j][1]);
+		else
+			val = copy->set_o(test[j][0], test[j][1]);
+		bot(copy, !player);
+		copy->new_set(test[j][0], test[j][1], -1);
 	}
 	cout << " " << g->x << endl;
 	return (1);
@@ -211,79 +218,93 @@ int  keyhook(int dim, int player, t_global *g, int val)
 	wmove(g->the_board, g->y*2+((win_y / 2) - (38 / 2)) + 1, g->x*4 + ((win_x / 2) - (77 / 2)) + 2);
 	wrefresh(g->the_board);
 	noecho();
-	switch(wgetch(g->the_board))
+
+	if (val == 2 && player == 0)
 	{
-		case KEY_UP:
-			if(g->y > 0)
-				g->y--;
-			return(-2);
-		case KEY_LEFT:
-			if(g->x > 0)
-				g->x--;
-			return(-2);
-		case KEY_RIGHT:
-			if(g->x < dim-1)
-				g->x++;
-			return(-2);
-		case KEY_DOWN:
-			if(g->y < dim-1)
-				g->y++;
-			return(-2);
-		case '\n':
-			echo();
-			wrefresh(g->the_board);
-			start_color();
-			if (player == 0)
-			{
-				if (val == 2)
+		board_class *copy;
+		copy = new board_class();
+		for (int yy = 0; yy < 19; yy++)
+		{
+			for (int xx = 0; xx < 19; xx++)
+				copy->new_set(xx, yy, g->board->get(xx, yy));
+		}
+		//copy->display();
+		bot(copy, player);
+		return (1);
+	 }
+		switch(wgetch(g->the_board))
+		{
+			case KEY_UP:
+				if(g->y > 0)
+					g->y--;
+				return(-2);
+			case KEY_LEFT:
+				if(g->x > 0)
+					g->x--;
+				return(-2);
+			case KEY_RIGHT:
+				if(g->x < dim-1)
+					g->x++;
+				return(-2);
+			case KEY_DOWN:
+				if(g->y < dim-1)
+					g->y++;
+				return(-2);
+			case '\n':
+				echo();
+				wrefresh(g->the_board);
+				start_color();
+				if (player == 0)
 				{
-					board_class *copy;
-					copy = new board_class();
-					for (int yy = 0; yy < 19; yy++)
-					{
-						for (int xx = 0; xx < 19; xx++)
-							copy->new_set(xx, yy, g->board->get(xx, yy));
-					}
+					/*if (val == 2)
+					  {
+					  board_class *copy;
+					  copy = new board_class();
+					  for (int yy = 0; yy < 19; yy++)
+					  {
+					  for (int xx = 0; xx < 19; xx++)
+					  copy->new_set(xx, yy, g->board->get(xx, yy));
+					  }
 					//copy->display();
 					bot(g, copy);
 					return (1);
-				}
-				if (g->board->set_x(g->x, g->y) && val == 1)
-				{
-					//init_color(COLOR_RED, 700,0, 100);
-					init_pair(1, COLOR_RED, COLOR_BLACK);
-					wattron(g->the_board, COLOR_PAIR(1));
-					mvwprintw(g->the_board, g->y*2+((win_y / 2) - (38 / 2)) + 1,g->x*4+ ((win_x / 2) - (77 / 2)) + 2, "X");
-					wattroff(g->the_board, COLOR_PAIR(1));
-					return (1);
-				}
-				else
-					return (-3);
-			}
-			else
-			{
-				if (g->board->set_o(g->x, g->y))
-				{
-					//init_color(COLOR_CYAN, 700, 100, 0);
-					init_pair(6, COLOR_CYAN, COLOR_BLACK);
-					wattron(g->the_board, COLOR_PAIR(6));
-					mvwprintw(g->the_board, g->y*2+((win_y / 2) - (38 / 2)) + 1,g->x*4+ ((win_x / 2) - (77 / 2)) + 2, "O");
-					wattroff(g->the_board ,COLOR_PAIR(6));
-					return (1);
+					}*/
+					if (g->board->set_x(g->x, g->y) && val == 1)
+					{
+						//init_color(COLOR_RED, 700,0, 100);
+						init_pair(1, COLOR_RED, COLOR_BLACK);
+						wattron(g->the_board, COLOR_PAIR(1));
+						mvwprintw(g->the_board, g->y*2+((win_y / 2) - (38 / 2)) + 1,g->x*4+ ((win_x / 2) - (77 / 2)) + 2, "X");
+						wattroff(g->the_board, COLOR_PAIR(1));
+						return (1);
+					}
+					else
+						return (-3);
 				}
 				else
-					return (-3);
-			}
-			break;
-		case 'q':
-			return(-1);
-		default:
-			return(-2);
-			break;
-	}
-	wmove(g->the_board, g->y*2+((win_y / 2) - (38 / 2)) + 1, g->x*4+((win_x - 80) / 2) + 2);
-	wrefresh(g->the_board);
-	return(0);
+				{
+					if (g->board->set_o(g->x, g->y))
+					{
+						//init_color(COLOR_CYAN, 700, 100, 0);
+						init_pair(6, COLOR_CYAN, COLOR_BLACK);
+						wattron(g->the_board, COLOR_PAIR(6));
+						mvwprintw(g->the_board, g->y*2+((win_y / 2) - (38 / 2)) + 1,g->x*4+ ((win_x / 2) - (77 / 2)) + 2, "O");
+						wattroff(g->the_board ,COLOR_PAIR(6));
+						return (1);
+					}
+					else
+						return (-3);
+				}
+				break;
+			case 'q':
+				return(-1);
+			default:
+				return(-2);
+				break;
+		}
+		wmove(g->the_board, g->y*2+((win_y / 2) - (38 / 2)) + 1, g->x*4+((win_x - 80) / 2) + 2);
+		wrefresh(g->the_board);
+		return(0);
 }
 
 void draw_borders(WINDOW *screen) 
