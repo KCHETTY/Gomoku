@@ -6,7 +6,7 @@
 /*   By: kchetty <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/06 16:26:03 by kchetty           #+#    #+#             */
-/*   Updated: 2017/01/06 16:36:19 by kchetty          ###   ########.fr       */
+/*   Updated: 2017/01/06 16:51:14 by kchetty          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,5 +36,7 @@ class moves
 		{
 			this->value = val;
 		}
+
+		void get_value() {return (this->value);}
 }
 
