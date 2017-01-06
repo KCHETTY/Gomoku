@@ -6,7 +6,7 @@
 /*   By: kchetty <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/28 08:34:50 by kchetty           #+#    #+#             */
-/*   Updated: 2017/01/06 16:15:03 by kchetty          ###   ########.fr       */
+/*   Updated: 2017/01/06 16:36:17 by kchetty          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -187,8 +187,9 @@ int  bot(board_class *copy, int player)
 		return (10);
 
 	vector < vector <int> > test;
+	vector < moves *> saves;
+	moves *temp = new moves();
 	test = delimeter(copy);
-	int val;
 
 	/*for (unsigned int j = 0; j < test.size(); j++)
 	{
@@ -198,11 +199,13 @@ int  bot(board_class *copy, int player)
 	}*/
 	for (unsigned int j = 0; j < test.size(); j++)
 	{
+		temp->set_co_ords(test[j][0], test[j][1]);
 		if (player == 0)
-			val = copy->set_x(test[j][0], test[j][1]);
+			temp->set_value(copy->set_x(test[j][0], test[j][1]));
 		else
-			val = copy->set_o(test[j][0], test[j][1]);
+			temp->set_value(copy->set_o(test[j][0], test[j][1]));
 		bot(copy, !player);
+		saves.push_back(temp);
 		copy->new_set(test[j][0], test[j][1], -1);
 	}
 	cout << " " << g->x << endl;
