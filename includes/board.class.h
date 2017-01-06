@@ -6,7 +6,7 @@
 /*   By: kchetty <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/29 11:49:26 by kchetty           #+#    #+#             */
-/*   Updated: 2016/12/10 11:24:34 by kchetty          ###   ########.fr       */
+/*   Updated: 2017/01/06 09:53:27 by kchetty          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,11 @@ class board_class
 			this->capture_o = 0;
 			this->capture_x = 0;
 		};
+
+		void new_set(int x, int y, int val)
+		{
+			this->board[y][x] = val;
+		}
 
 		int	get(int x, int y) { return (this->board[y][x]); }
 		int set_x(int x, int y) 

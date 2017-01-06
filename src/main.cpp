@@ -6,11 +6,103 @@
 /*   By: kchetty <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/28 08:34:50 by kchetty           #+#    #+#             */
-/*   Updated: 2017/01/06 09:19:28 by kchetty          ###   ########.fr       */
+/*   Updated: 2017/01/06 09:54:37 by kchetty          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "gomoku.h"
+
+void delimeter()
+{
+	vector <vector <int> > co_ords;
+	int array[19][19];
+	int x, y; 
+
+
+	vector<int> temp;
+	temp.push_back(0);
+	temp.push_back(0);
+	int tmp_y;
+	int tmp_x;
+	for (y = 0; y < 19; y++)
+	{
+		for (x = 0; x < 19; x++)
+		{
+			tmp_x = x;
+			tmp_y = y;
+			if (array[y][x + 1] == -1 && (array[y][x] == 1 || array[y][x] == 2) && (x + 1 < 19))
+			{
+				temp[0] = tmp_x += 1;
+				temp[1] = y;
+				tmp_x -= 1;
+				co_ords.push_back(temp);
+			}
+			if (array[y + 1][x] == -1 && (array[y][x] == 1 || array[y][x] == 2) && (y + 1 < 19))
+			{
+				temp[0] = x;
+				temp[1] = tmp_y += 1;
+				tmp_y -= 1;
+				co_ords.push_back(temp);
+			}
+			if (array[y - 1][x] == -1 && (array[y][x] == 1 || array[y][x] == 2) && (y - 1 >= 0))
+			{
+				temp[0] = x;
+				temp[1] = tmp_y -= 1;
+				tmp_y += 1;
+				co_ords.push_back(temp);
+			}
+			if (array[y][x - 1] == -1 && (array[y][x] == 1 || array[y][x] == 2) && (x - 1 >= 0))
+			{
+				temp[0] = tmp_x -= 1;
+				temp[1] = y;
+				tmp_x += 1;
+				co_ords.push_back(temp);
+			}
+			if (array[y + 1][x + 1] == -1 && (array[y][x] == 1 || array[y][x] == 2) && (y + 1 < 19 && x + 1 < 19))
+			{
+				temp[0] = tmp_x += 1;
+				temp[1] = tmp_y += 1;
+				tmp_y -= 1;
+				tmp_x -= 1;
+				co_ords.push_back(temp);
+			}
+			if (array[y - 1][x + 1] == -1 && (array[y][x] == 1 || array[y][x] == 2) && (y - 1 >= 0 && x + 1 < 19))
+			{
+				temp[0] = tmp_x += 1;
+				temp[1] = tmp_y -= 1;
+				tmp_x -= 1;
+				tmp_y += 1;
+				co_ords.push_back(temp);
+			}
+			if (array[y - 1][x - 1] == -1 && (array[y][x] == 1 || array[y][x] == 2) && (y - 1 >= 0 && x - 1 >= 0))
+			{
+				temp[0] = tmp_x -= 1;
+				temp[1] = tmp_y -= 1;
+				tmp_x += 1;
+				tmp_y += 1;
+				co_ords.push_back(temp);
+			}
+			if (array[y + 1][x - 1] == -1 && (array[y][x] == 1 || array[y][x] == 2) && (y + 1 < 19 && x - 1 >= 0))
+			{
+				temp[0] = tmp_x -= 1;
+				temp[1] = tmp_y += 1;
+				tmp_y -= 1;
+				tmp_x += 1;
+				co_ords.push_back(temp);
+			}
+		}
+	}
+	cout << endl;
+	for (unsigned int i = 0; i < co_ords.size(); i++)
+	{
+		cout << " " << co_ords[i][0] << endl;
+		cout << " " << co_ords[i][1] << endl;
+		cout << endl << endl;
+	}
+
+
+	//return (0);
+}
 
 void draw_screen(int dim, t_global *g)
 {
@@ -98,6 +190,7 @@ void	redraw_stuff(t_global *g)
 
 int  ai(t_global *g)
 {
+	delimeter();
 	cout << " " << g->x << endl;
 	return (1);
 }
@@ -137,6 +230,14 @@ int  keyhook(int dim, int player, t_global *g, int val)
 			{
 				if (val == 2)
 				{
+					board_class *copy;
+					copy = new board_class();
+					for (int yy = 0; yy < 19; yy++)
+					{
+						for (int xx = 0; xx < 19; xx++)
+							copy->new_set(xx, yy, g->board->get(xx, yy));
+					}
+					copy->display();
 					ai(g);
 					return (1);
 				}
