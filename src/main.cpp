@@ -6,7 +6,7 @@
 /*   By: kchetty <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/28 08:34:50 by kchetty           #+#    #+#             */
-/*   Updated: 2017/01/06 09:09:20 by kchetty          ###   ########.fr       */
+/*   Updated: 2017/01/06 09:19:28 by kchetty          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,11 +98,11 @@ void	redraw_stuff(t_global *g)
 
 int  ai(t_global *g)
 {
-
-
+	cout << " " << g->x << endl;
+	return (1);
 }
 
-int  keyhook(int dim, int player, t_global *g)
+int  keyhook(int dim, int player, t_global *g, int val)
 {
 	int win_y, win_x;
 	getmaxyx(g->the_board, win_y, win_x);
@@ -135,7 +135,12 @@ int  keyhook(int dim, int player, t_global *g)
 			start_color();
 			if (player == 0)
 			{
-				if (g->board->set_x(g->x, g->y))
+				if (val == 2)
+				{
+					ai(g);
+					return (1);
+				}
+				if (g->board->set_x(g->x, g->y) && val == 1)
 				{
 					//init_color(COLOR_RED, 700,0, 100);
 					init_pair(1, COLOR_RED, COLOR_BLACK);
@@ -321,7 +326,7 @@ int pvb(t_global *g)
 			draw_screen(dim, g);
 			redraw_stuff(g);
 		}
-		if((rtn=keyhook(dim,player, g))==-1)
+		if((rtn=keyhook(dim,player, g, 2))==-1)
 			break;
 		if (g->board->check_capture(player))
 		{
@@ -401,7 +406,7 @@ int pvp(t_global *g)
 			draw_screen(dim, g);
 			redraw_stuff(g);
 		}
-		if((rtn=keyhook(dim,player, g))==-1)
+		if((rtn=keyhook(dim,player, g, 1))==-1)
 			break;
 		if (g->board->check_capture(player))
 		{
@@ -630,6 +635,7 @@ int main()
 				if (option == 1)
 				{
 					//Do One Player Stuff
+					g.board->init();
 					curs_set(TRUE);
 					pvb(&g);
 					curs_set(FALSE);
@@ -638,6 +644,7 @@ int main()
 				if (option == 2)
 				{
 					//Do Two Player Stuff
+					g.board->init();
 					curs_set(TRUE);
 					pvp(&g);
 					curs_set(FALSE);
