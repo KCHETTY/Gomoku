@@ -6,16 +6,15 @@
 /*   By: kchetty <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/28 08:34:50 by kchetty           #+#    #+#             */
-/*   Updated: 2017/01/06 09:54:37 by kchetty          ###   ########.fr       */
+/*   Updated: 2017/01/06 15:12:38 by kchetty          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "gomoku.h"
 
-void delimeter()
+vector < vector <int> >  delimeter(board_class *copy)
 {
 	vector <vector <int> > co_ords;
-	int array[19][19];
 	int x, y; 
 
 
@@ -30,35 +29,35 @@ void delimeter()
 		{
 			tmp_x = x;
 			tmp_y = y;
-			if (array[y][x + 1] == -1 && (array[y][x] == 1 || array[y][x] == 2) && (x + 1 < 19))
+			if (copy->get(y, x + 1) == -1 && (copy->get(y, x) == 1 || copy->get(y, x) == 2) && (x + 1 < 19))
 			{
 				temp[0] = tmp_x += 1;
 				temp[1] = y;
 				tmp_x -= 1;
 				co_ords.push_back(temp);
 			}
-			if (array[y + 1][x] == -1 && (array[y][x] == 1 || array[y][x] == 2) && (y + 1 < 19))
+			if (copy->get(y + 1, x) == -1 && (copy->get(y, x) == 1 || copy->get(y, x) == 2) && (y + 1 < 19))
 			{
 				temp[0] = x;
 				temp[1] = tmp_y += 1;
 				tmp_y -= 1;
 				co_ords.push_back(temp);
 			}
-			if (array[y - 1][x] == -1 && (array[y][x] == 1 || array[y][x] == 2) && (y - 1 >= 0))
+			if (copy->get(y - 1, x) == -1 && (copy->get(y, x) == 1 || copy->get(y, x) == 2) && (y - 1 >= 0))
 			{
 				temp[0] = x;
 				temp[1] = tmp_y -= 1;
 				tmp_y += 1;
 				co_ords.push_back(temp);
 			}
-			if (array[y][x - 1] == -1 && (array[y][x] == 1 || array[y][x] == 2) && (x - 1 >= 0))
+			if (copy->get(y, x - 1) == -1 && (copy->get(y, x) == 1 || copy->get(y, x) == 2) && (x - 1 >= 0))
 			{
 				temp[0] = tmp_x -= 1;
 				temp[1] = y;
 				tmp_x += 1;
 				co_ords.push_back(temp);
 			}
-			if (array[y + 1][x + 1] == -1 && (array[y][x] == 1 || array[y][x] == 2) && (y + 1 < 19 && x + 1 < 19))
+			if (copy->get(y + 1, x + 1) == -1 && (copy->get(y, x) == 1 || copy->get(y, x) == 2) && (y + 1 < 19 && x + 1 < 19))
 			{
 				temp[0] = tmp_x += 1;
 				temp[1] = tmp_y += 1;
@@ -66,7 +65,7 @@ void delimeter()
 				tmp_x -= 1;
 				co_ords.push_back(temp);
 			}
-			if (array[y - 1][x + 1] == -1 && (array[y][x] == 1 || array[y][x] == 2) && (y - 1 >= 0 && x + 1 < 19))
+			if (copy->get(y - 1, x + 1) == -1 && (copy->get(y, x) == 1 || copy->get(y, x) == 2) && (y - 1 >= 0 && x + 1 < 19))
 			{
 				temp[0] = tmp_x += 1;
 				temp[1] = tmp_y -= 1;
@@ -74,7 +73,7 @@ void delimeter()
 				tmp_y += 1;
 				co_ords.push_back(temp);
 			}
-			if (array[y - 1][x - 1] == -1 && (array[y][x] == 1 || array[y][x] == 2) && (y - 1 >= 0 && x - 1 >= 0))
+			if (copy->get(y - 1, x - 1) == -1 && (copy->get(y, x) == 1 || copy->get(y, x) == 2) && (y - 1 >= 0 && x - 1 >= 0))
 			{
 				temp[0] = tmp_x -= 1;
 				temp[1] = tmp_y -= 1;
@@ -82,7 +81,7 @@ void delimeter()
 				tmp_y += 1;
 				co_ords.push_back(temp);
 			}
-			if (array[y + 1][x - 1] == -1 && (array[y][x] == 1 || array[y][x] == 2) && (y + 1 < 19 && x - 1 >= 0))
+			if (copy->get(y + 1, x - 1) == -1 && (copy->get(y, x) == 1 || copy->get(y, x) == 2) && (y + 1 < 19 && x - 1 >= 0))
 			{
 				temp[0] = tmp_x -= 1;
 				temp[1] = tmp_y += 1;
@@ -101,7 +100,7 @@ void delimeter()
 	}
 
 
-	//return (0);
+	return (co_ords);
 }
 
 void draw_screen(int dim, t_global *g)
@@ -188,9 +187,17 @@ void	redraw_stuff(t_global *g)
 	wrefresh(g->the_board);
 }
 
-int  ai(t_global *g)
+int  bot(t_global *g, board_class *copy)
 {
-	delimeter();
+	vector < vector <int> > test;
+	test = delimeter(copy);
+
+	for (unsigned int j = 0; j < test.size(); j++)
+	{
+		cout << test[j][0] << endl;
+		cout << test[j][1] << endl;
+		cout << endl;
+	}
 	cout << " " << g->x << endl;
 	return (1);
 }
@@ -237,8 +244,8 @@ int  keyhook(int dim, int player, t_global *g, int val)
 						for (int xx = 0; xx < 19; xx++)
 							copy->new_set(xx, yy, g->board->get(xx, yy));
 					}
-					copy->display();
-					ai(g);
+					//copy->display();
+					bot(g, copy);
 					return (1);
 				}
 				if (g->board->set_x(g->x, g->y) && val == 1)
@@ -387,7 +394,7 @@ void	draw_player_stats(t_global *g, int player)
 
 int pvb(t_global *g)
 {
-	int dim,rtn,player = 0;
+	int dim,rtn,player = 1;
 	int parent_x = 0, parent_y = 0, new_x, new_y;
 	getmaxyx(stdscr, parent_y, parent_x);
 
