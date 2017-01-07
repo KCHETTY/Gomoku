@@ -6,7 +6,7 @@
 /*   By: kchetty <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/28 08:34:50 by kchetty           #+#    #+#             */
-/*   Updated: 2017/01/06 16:51:09 by kchetty          ###   ########.fr       */
+/*   Updated: 2017/01/07 10:48:35 by kchetty          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,35 +29,35 @@ vector < vector <int> >  delimeter(board_class *copy)
 		{
 			tmp_x = x;
 			tmp_y = y;
-			if (copy->get(y, x + 1) == -1 && (copy->get(y, x) == 1 || copy->get(y, x) == 2) && (x + 1 < 19))
+			if (copy->get(y, x + 1) == -1 && (copy->get(y, x) == 1 || copy->get(y, x) == 0) && (x + 1 < 19))
 			{
 				temp[0] = tmp_x += 1;
 				temp[1] = y;
 				tmp_x -= 1;
 				co_ords.push_back(temp);
 			}
-			if (copy->get(y + 1, x) == -1 && (copy->get(y, x) == 1 || copy->get(y, x) == 2) && (y + 1 < 19))
+			if (copy->get(y + 1, x) == -1 && (copy->get(y, x) == 1 || copy->get(y, x) == 0) && (y + 1 < 19))
 			{
 				temp[0] = x;
 				temp[1] = tmp_y += 1;
 				tmp_y -= 1;
 				co_ords.push_back(temp);
 			}
-			if (copy->get(y - 1, x) == -1 && (copy->get(y, x) == 1 || copy->get(y, x) == 2) && (y - 1 >= 0))
+			if (copy->get(y - 1, x) == -1 && (copy->get(y, x) == 1 || copy->get(y, x) == 0) && (y - 1 >= 0))
 			{
 				temp[0] = x;
 				temp[1] = tmp_y -= 1;
 				tmp_y += 1;
 				co_ords.push_back(temp);
 			}
-			if (copy->get(y, x - 1) == -1 && (copy->get(y, x) == 1 || copy->get(y, x) == 2) && (x - 1 >= 0))
+			if (copy->get(y, x - 1) == -1 && (copy->get(y, x) == 1 || copy->get(y, x) == 0) && (x - 1 >= 0))
 			{
 				temp[0] = tmp_x -= 1;
 				temp[1] = y;
 				tmp_x += 1;
 				co_ords.push_back(temp);
 			}
-			if (copy->get(y + 1, x + 1) == -1 && (copy->get(y, x) == 1 || copy->get(y, x) == 2) && (y + 1 < 19 && x + 1 < 19))
+			if (copy->get(y + 1, x + 1) == -1 && (copy->get(y, x) == 1 || copy->get(y, x) == 0) && (y + 1 < 19 && x + 1 < 19))
 			{
 				temp[0] = tmp_x += 1;
 				temp[1] = tmp_y += 1;
@@ -65,7 +65,7 @@ vector < vector <int> >  delimeter(board_class *copy)
 				tmp_x -= 1;
 				co_ords.push_back(temp);
 			}
-			if (copy->get(y - 1, x + 1) == -1 && (copy->get(y, x) == 1 || copy->get(y, x) == 2) && (y - 1 >= 0 && x + 1 < 19))
+			if (copy->get(y - 1, x + 1) == -1 && (copy->get(y, x) == 1 || copy->get(y, x) == 0) && (y - 1 >= 0 && x + 1 < 19))
 			{
 				temp[0] = tmp_x += 1;
 				temp[1] = tmp_y -= 1;
@@ -73,7 +73,7 @@ vector < vector <int> >  delimeter(board_class *copy)
 				tmp_y += 1;
 				co_ords.push_back(temp);
 			}
-			if (copy->get(y - 1, x - 1) == -1 && (copy->get(y, x) == 1 || copy->get(y, x) == 2) && (y - 1 >= 0 && x - 1 >= 0))
+			if (copy->get(y - 1, x - 1) == -1 && (copy->get(y, x) == 1 || copy->get(y, x) == 0) && (y - 1 >= 0 && x - 1 >= 0))
 			{
 				temp[0] = tmp_x -= 1;
 				temp[1] = tmp_y -= 1;
@@ -81,7 +81,7 @@ vector < vector <int> >  delimeter(board_class *copy)
 				tmp_y += 1;
 				co_ords.push_back(temp);
 			}
-			if (copy->get(y + 1, x - 1) == -1 && (copy->get(y, x) == 1 || copy->get(y, x) == 2) && (y + 1 < 19 && x - 1 >= 0))
+			if (copy->get(y + 1, x - 1) == -1 && (copy->get(y, x) == 1 || copy->get(y, x) == 0) && (y + 1 < 19 && x - 1 >= 0))
 			{
 				temp[0] = tmp_x -= 1;
 				temp[1] = tmp_y += 1;
@@ -91,8 +91,24 @@ vector < vector <int> >  delimeter(board_class *copy)
 			}
 		}
 	}
-	cout << endl;
-	return (co_ords);
+	
+	int flag = 0;
+	vector < vector <int> > newer;
+	for(unsigned int i = 0; i < co_ords.size(); i++)
+	{
+		tmp_x = co_ords[i][0];
+		tmp_y = co_ords[i][1];
+		for (unsigned int j = 0; j < co_ords.size(); j++)
+		{
+			if (tmp_x == co_ords[j][0] && tmp_y == co_ords[j][1])
+				flag = 1;
+		}
+		if (flag == 0)
+			newer.push_back(co_ords[i]);
+		flag = 0;
+	}
+
+	return (newer);
 }
 
 void draw_screen(int dim, t_global *g)
@@ -198,19 +214,24 @@ see bot(board_class* copy, int player)
 	vector < see > saves;
 	test = delimeter(copy);
 
-	/*for (unsigned int j = 0; j < test.size(); j++)
-	  {
+
+	copy->display();
+
+	for (unsigned int j = 0; j < test.size(); j++)
+	{
 	  cout << test[j][0] << endl;
 	  cout << test[j][1] << endl;
 	  cout << endl;
-	  }*/
+	}
+
+	sleep(30);
 	for (unsigned int j = 0; j < test.size(); j++)
 	{
 		see hey;
 		hey.x = test[j][0];
 		hey.y = test[j][1];
-		cout << hey.x << "   AND    " << hey.y << endl;
-		sleep(10);
+		//cout << hey.x << "   AND    " << hey.y << endl;
+		//sleep(2);
 		if (player == 0)
 			copy->set_x(test[j][0], test[j][1]);
 		else
@@ -268,7 +289,6 @@ int  keyhook(int dim, int player, t_global *g, int val)
 			for (int xx = 0; xx < 19; xx++)
 				copy->new_set(xx, yy, g->board->get(xx, yy));
 		}
-		cout << "HEY IM HERERERERERRERER \n" << endl;
 		see newt = bot(copy, player);
 		cout << newt.x << " and " << newt.y << endl;
 		g->board->set_x(newt.x, newt.y);
