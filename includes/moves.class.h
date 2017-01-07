@@ -15,12 +15,12 @@
 # include <sstream>
 # include <string>
 
-using namespace std;
+//using namespace std;
 
 class moves
 {
 	private:
-		int value
+		int value;
 		int x;
 		int y;
 
@@ -37,6 +37,6 @@ class moves
 			this->value = val;
 		}
 
-		void get_value() {return (this->value);}
+		int get_value() {return (this->value);
 }
 

@@ -179,16 +179,23 @@ void	redraw_stuff(t_global *g)
 	wrefresh(g->the_board);
 }
 
-int  bot(board_class *copy, int player)
+see bot(board_class* copy, int player)
 {
 	if (copy->check_win(0))
-		return (10);
+	{
+		see testis;
+		testis.value = 10;
+		return testis;
+	}
 	if (copy->check_win(1))
-		return (10);
+	{
+		see testis;
+		testis.value = -10;
+		return testis;
+	}
 
 	vector < vector <int> > test;
-	vector < moves *> saves;
-	moves *temp = new moves();
+	vector < see > saves;
 	test = delimeter(copy);
 
 	/*for (unsigned int j = 0; j < test.size(); j++)
@@ -199,13 +206,18 @@ int  bot(board_class *copy, int player)
 	  }*/
 	for (unsigned int j = 0; j < test.size(); j++)
 	{
-		temp->set_co_ords(test[j][0], test[j][1]);
+		see hey;
+		hey.x = test[j][0];
+		hey.y = test[j][1];
+		cout << hey.x << "   AND    " << hey.y << endl;
+		sleep(10);
 		if (player == 0)
-			temp->set_value(copy->set_x(test[j][0], test[j][1]));
+			copy->set_x(test[j][0], test[j][1]);
 		else
-			temp->set_value(copy->set_o(test[j][0], test[j][1]));
-		bot(copy, !player);
-		saves.push_back(temp);
+			copy->set_o(test[j][0], test[j][1]);
+		//copy->display();	
+		hey.value = bot(copy, !player).value;
+		saves.push_back(hey);
 		copy->new_set(test[j][0], test[j][1], -1);
 	}
 
@@ -215,10 +227,10 @@ int  bot(board_class *copy, int player)
 		int best_score = -100000;
 		for (unsigned int o = 0; o < saves.size(); o++)
 		{
-			if (saves[o]->get_val() > best_score)
+			if (saves[o].value > best_score)
 			{
 				best_move = o;
-				best_score = saves[o]->get_val();
+				best_score = saves[o].value;
 			}
 		}	
 	}
@@ -227,13 +239,14 @@ int  bot(board_class *copy, int player)
 		int best_score = 100000;
 		for (unsigned int o = 0; o > saves.size(); o++)
 		{
-			if (saves[o]->get_val() > best_score)
+			if (saves[o].value > best_score)
 			{
 				best_move = o;
-				best_score = saves[o]->get_val();
+				best_score = saves[o].value;
 			}
 		}	
 	}
+	return (saves[best_move]);
 }
 
 int  keyhook(int dim, int player, t_global *g, int val)
@@ -255,8 +268,16 @@ int  keyhook(int dim, int player, t_global *g, int val)
 			for (int xx = 0; xx < 19; xx++)
 				copy->new_set(xx, yy, g->board->get(xx, yy));
 		}
-		//copy->display();
-		bot(copy, player);
+		cout << "HEY IM HERERERERERRERER \n" << endl;
+		see newt = bot(copy, player);
+		cout << newt.x << " and " << newt.y << endl;
+		g->board->set_x(newt.x, newt.y);
+		echo();
+		start_color();
+		init_pair(1, COLOR_RED, COLOR_BLACK);                                  
+		wattron(g->the_board, COLOR_PAIR(1));                                  
+		mvwprintw(g->the_board, newt.y*2+((win_y / 2) - (38 / 2)) + 1,newt.x*4+ ((win_x / 2) - (77 / 2)) + 2, "X");
+		wattroff(g->the_board, COLOR_PAIR(1));
 		return (1);
 	}
 	switch(wgetch(g->the_board))

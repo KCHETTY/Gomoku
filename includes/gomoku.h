@@ -20,10 +20,11 @@
 # include <vector>
 # include <ncurses.h>
 # include <math.h>
+# include <unistd.h>
 # include <time.h>
 # include <regex>
 # include "board.class.h"
-# include "moves.class.h"
+//# include "moves.class.h"
 
 using namespace	std;
 
@@ -36,5 +37,12 @@ typedef struct		s_global
 	int				x;
 	int				y;
 }					t_global;
+
+struct see
+{
+	int x;
+	int y; 
+	int value;
+};
 
 #endif
