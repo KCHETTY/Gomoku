@@ -6,7 +6,7 @@
 /*   By: kchetty <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/28 08:34:50 by kchetty           #+#    #+#             */
-/*   Updated: 2017/01/07 12:43:04 by kchetty          ###   ########.fr       */
+/*   Updated: 2017/01/07 14:07:42 by kchetty          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ vector < vector <int> >  delimeter(board_class *copy)
 			}
 		}
 	}
-	
+
 	int flag = 0;
 	vector < vector <int> > newer;
 	for(unsigned int i = 0; i < co_ords.size(); i++)
@@ -196,37 +196,87 @@ see bot(board_class* copy, int player)
 		testis.value = -10;
 		return testis;
 	}
+	if (copy->check_capture(0))
+	{
+		see testis;
+		testis.value = 5;
+		return testis;	
+	}
+	if (copy->check_capture(1))
+	{
+		see testis;
+		testis.value = -5;
+		return testis;
+	}
 
+	//	cout << "the stuuf fff fson " << endl;
 	vector < vector <int> > test;
 	vector < see > saves;
 	test = delimeter(copy);
 
 
-	copy->display();
+	//copy->display();
 
-	for (unsigned int j = 0; j < test.size(); j++)
-	{
+	/*for (unsigned int j = 0; j < test.size(); j++)
+	  {
 	  cout << test[j][0] << endl;
 	  cout << test[j][1] << endl;
 	  cout << endl;
-	}
+	  }*/
 
-	sleep(14);
+	//sleep(5);
+	//cout << "its the size " << test.size() << endl;
+	//sleep(1);
+	/*int y = 0, x = 0;
+	int win_y, win_x;
+	getmaxyx(g->the_board, win_y, win_x);
+	start_color();
+	wmove(g->the_board, y*2+((win_y / 2) - (38 / 2)) + 1, x*4 + ((win_x / 2) - (77 / 2)) + 2);
+	for (y = 0; y < 19; y++)
+	{
+		for (x = 0; x < 19; x++)
+		{
+			if (copy->get(x, y) == 0)
+			{
+				init_color(COLOR_RED, 700,0, 700);
+				init_pair(1, COLOR_RED, COLOR_BLACK);
+				wattron(g->the_board, COLOR_PAIR(1));
+				mvwprintw(g->the_board, y * 2 + ((win_y / 2) - (38 / 2)) + 1, x * 4 + ((win_x / 2) - (77 / 2)) + 2, "X");
+				wattroff(g->the_board, COLOR_PAIR(1));
+			}
+			else if (copy->get(x, y) == 1)
+			{
+				init_color(COLOR_CYAN, 700, 100, 0);
+				init_pair(6, COLOR_CYAN, COLOR_BLACK);
+				wattron(g->the_board, COLOR_PAIR(6));
+				mvwprintw(g->the_board, y*2+ ((win_y / 2) - (38 / 2)) + 1, x*4+ ((win_x / 2) - (77 / 2)) + 2, "O");
+				wattroff(g->the_board ,COLOR_PAIR(6));
+			}
+		}
+	}
+	wrefresh(g->the_board);*/ 
 	for (unsigned int j = 0; j < test.size(); j++)
 	{
 		see hey;
 		hey.x = test[j][0];
 		hey.y = test[j][1];
-		cout << hey.x << "   AND    " << hey.y << endl;
-		sleep(2);
+		//cout << hey.x << "   AND    " << hey.y << endl;
+		//sleep(2);
+		//cout << "The Player " << player << endl;
 		if (player == 0)
-			copy->set_x(test[j][0], test[j][1]);
+			copy->set_x(hey.x, hey.y);
 		else
-			copy->set_o(test[j][0], test[j][1]);
-		//copy->display();	
+			copy->set_o(hey.x, hey.y);
 		hey.value = bot(copy, !player).value;
+		//copy->display();
+		//cout << "the last ,message" << endl;	
+		//cout << "qhhqhqhws" << endl;
+		//cout << "THE VALUE " << hey.value << endl;
+		//sleep(1);
 		saves.push_back(hey);
-		copy->new_set(test[j][0], test[j][1], -1);
+		//cout << hey.x << " ANNDDD " << hey.y << endl;
+		//sleep(10);
+		copy->new_set(test[j][0], test[j][0], -1);
 	}
 
 	int best_move = 0;
@@ -245,15 +295,16 @@ see bot(board_class* copy, int player)
 	else
 	{
 		int best_score = 100000;
-		for (unsigned int o = 0; o > saves.size(); o++)
+		for (unsigned int o = 0; o < saves.size(); o++)
 		{
-			if (saves[o].value > best_score)
+			if (saves[o].value < best_score)
 			{
 				best_move = o;
 				best_score = saves[o].value;
 			}
 		}	
 	}
+	//	cout << "hilow "<< endl;
 	return (saves[best_move]);
 }
 
@@ -276,8 +327,8 @@ int  keyhook(int dim, int player, t_global *g, int val)
 			for (int xx = 0; xx < 19; xx++)
 				copy->new_set(xx, yy, g->board->get(xx, yy));
 		}
-		see newt = bot(copy, player);
-		cout << newt.x << " and " << newt.y << endl;
+		see newt = bot(copy, 0);
+		//out << newt.x << " and " << newt.y << endl;
 		g->board->set_x(newt.x, newt.y);
 		echo();
 		start_color();
