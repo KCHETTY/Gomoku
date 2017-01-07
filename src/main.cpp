@@ -6,7 +6,7 @@
 /*   By: kchetty <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/28 08:34:50 by kchetty           #+#    #+#             */
-/*   Updated: 2017/01/07 10:48:35 by kchetty          ###   ########.fr       */
+/*   Updated: 2017/01/07 12:28:00 by kchetty          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,6 @@ vector < vector <int> >  delimeter(board_class *copy)
 	vector <vector <int> > co_ords;
 	int x, y; 
 
-
 	vector<int> temp;
 	temp.push_back(0);
 	temp.push_back(0);
@@ -27,66 +26,54 @@ vector < vector <int> >  delimeter(board_class *copy)
 	{
 		for (x = 0; x < 19; x++)
 		{
-			tmp_x = x;
-			tmp_y = y;
-			if (copy->get(y, x + 1) == -1 && (copy->get(y, x) == 1 || copy->get(y, x) == 0) && (x + 1 < 19))
+			//tmp_x = x;
+			//tmp_y = y;
+			if ((copy->get(y, x + 1) == -1) && (copy->get(y, x) == 1 || copy->get(y, x) == 0) && (x + 1 < 19))
 			{
-				temp[0] = tmp_x += 1;
+				temp[0] = x + 1;
 				temp[1] = y;
-				tmp_x -= 1;
 				co_ords.push_back(temp);
 			}
-			if (copy->get(y + 1, x) == -1 && (copy->get(y, x) == 1 || copy->get(y, x) == 0) && (y + 1 < 19))
+			if ((copy->get(y + 1, x) == -1) && (copy->get(y, x) == 1 || copy->get(y, x) == 0) && (y + 1 < 19))
 			{
 				temp[0] = x;
-				temp[1] = tmp_y += 1;
-				tmp_y -= 1;
+				temp[1] = y + 1;
 				co_ords.push_back(temp);
 			}
-			if (copy->get(y - 1, x) == -1 && (copy->get(y, x) == 1 || copy->get(y, x) == 0) && (y - 1 >= 0))
+			if ((copy->get(y - 1, x) == -1) && (copy->get(y, x) == 1 || copy->get(y, x) == 0) && (y - 1 >= 0))
 			{
 				temp[0] = x;
-				temp[1] = tmp_y -= 1;
-				tmp_y += 1;
+				temp[1] = y - 1;
 				co_ords.push_back(temp);
 			}
-			if (copy->get(y, x - 1) == -1 && (copy->get(y, x) == 1 || copy->get(y, x) == 0) && (x - 1 >= 0))
+			if ((copy->get(y, x - 1) == -1) && (copy->get(y, x) == 1 || copy->get(y, x) == 0) && (x - 1 >= 0))
 			{
-				temp[0] = tmp_x -= 1;
+				temp[0] = x - 1;
 				temp[1] = y;
-				tmp_x += 1;
 				co_ords.push_back(temp);
 			}
-			if (copy->get(y + 1, x + 1) == -1 && (copy->get(y, x) == 1 || copy->get(y, x) == 0) && (y + 1 < 19 && x + 1 < 19))
+			if ((copy->get(y + 1, x + 1) == -1) && (copy->get(y, x) == 1 || copy->get(y, x) == 0) && (y + 1 < 19 && x + 1 < 19))
 			{
-				temp[0] = tmp_x += 1;
-				temp[1] = tmp_y += 1;
-				tmp_y -= 1;
-				tmp_x -= 1;
+				temp[0] = x + 1;
+				temp[1] = y + 1;
 				co_ords.push_back(temp);
 			}
-			if (copy->get(y - 1, x + 1) == -1 && (copy->get(y, x) == 1 || copy->get(y, x) == 0) && (y - 1 >= 0 && x + 1 < 19))
+			if ((copy->get(y - 1, x + 1) == -1) && (copy->get(y, x) == 1 || copy->get(y, x) == 0) && (y - 1 >= 0 && x + 1 < 19))
 			{
-				temp[0] = tmp_x += 1;
-				temp[1] = tmp_y -= 1;
-				tmp_x -= 1;
-				tmp_y += 1;
+				temp[0] = x + 1;
+				temp[1] = y - 1;
 				co_ords.push_back(temp);
 			}
-			if (copy->get(y - 1, x - 1) == -1 && (copy->get(y, x) == 1 || copy->get(y, x) == 0) && (y - 1 >= 0 && x - 1 >= 0))
+			if ((copy->get(y - 1, x - 1) == -1) && (copy->get(y, x) == 1 || copy->get(y, x) == 0) && (y - 1 >= 0 && x - 1 >= 0))
 			{
-				temp[0] = tmp_x -= 1;
-				temp[1] = tmp_y -= 1;
-				tmp_x += 1;
-				tmp_y += 1;
+				temp[0] = x - 1;
+				temp[1] = y - 1;
 				co_ords.push_back(temp);
 			}
-			if (copy->get(y + 1, x - 1) == -1 && (copy->get(y, x) == 1 || copy->get(y, x) == 0) && (y + 1 < 19 && x - 1 >= 0))
+			if ((copy->get(y + 1, x - 1) == -1) && (copy->get(y, x) == 1 || copy->get(y, x) == 0) && (y + 1 < 19 && x - 1 >= 0))
 			{
-				temp[0] = tmp_x -= 1;
-				temp[1] = tmp_y += 1;
-				tmp_y -= 1;
-				tmp_x += 1;
+				temp[0] = x - 1;
+				temp[1] = y + 1;
 				co_ords.push_back(temp);
 			}
 		}
@@ -98,7 +85,7 @@ vector < vector <int> >  delimeter(board_class *copy)
 	{
 		tmp_x = co_ords[i][0];
 		tmp_y = co_ords[i][1];
-		for (unsigned int j = 0; j < co_ords.size(); j++)
+		for (unsigned int j = i + 1; j < co_ords.size(); j++)
 		{
 			if (tmp_x == co_ords[j][0] && tmp_y == co_ords[j][1])
 				flag = 1;
@@ -224,14 +211,14 @@ see bot(board_class* copy, int player)
 	  cout << endl;
 	}
 
-	sleep(30);
+	sleep(23);
 	for (unsigned int j = 0; j < test.size(); j++)
 	{
 		see hey;
 		hey.x = test[j][0];
 		hey.y = test[j][1];
-		//cout << hey.x << "   AND    " << hey.y << endl;
-		//sleep(2);
+		cout << hey.x << "   AND    " << hey.y << endl;
+		sleep(2);
 		if (player == 0)
 			copy->set_x(test[j][0], test[j][1]);
 		else
